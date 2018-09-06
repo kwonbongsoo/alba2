@@ -118,7 +118,14 @@
       }
     },
     mounted() {
-      console.log(this.$v)
+
+      let params = {
+        no: this.$route.params.no
+      }
+      this.$store.dispatch('product_detail', params)
+      .then((res) => {
+        console.log(res)
+      })
     },
     methods: {
       submit () {

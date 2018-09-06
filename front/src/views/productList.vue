@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <v-hover class="product">
-      <v-card
+  <div class="product_list_container">
+    <v-hover class="product" v-for="product in l_product">
+      <v-card 
         slot-scope="{ hover }"
         :class="`elevation-${hover ? 12 : 2}`"
         class="mx-auto"
@@ -10,34 +10,32 @@
         <v-btn icon class="mr-0 float_right">
           <v-icon>clear</v-icon>
         </v-btn>
-        <v-img @click="productDetail"
+        <v-img @click="productDetail(product.no)"
           :aspect-ratio="16/9"
           src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
         />
         
-        <v-card-title @click="productDetail">
+        <v-card-title class="block_box" @click="productDetail(product.no)">
           <div>
-            <span class="headline">Cafe Badilico</span>
+            <span class="headline">{{product.name}}</span>
             <div class="d-flex">
-              <v-rating
-                :value="value"
-                color="amber"
-                dense
-                half-increments
-                readonly
-                size="14"
-              ></v-rating>
-              <div class="ml-2 grey--text text--darken-2">
-                <span>{{ value }}</span>
-                <span>({{ reviews }})</span>
+              <div class="ml-2 text--darken-2">
+                <span class="headline">{{product.price}}원</span>
               </div>
             </div>
           </div>
           <v-spacer></v-spacer>
-          <span>2,000원</span>
+          <span>{{l_product.price}}</span>
         </v-card-title>
       </v-card>
     </v-hover>
+    <v-footer app class="page_div">
+        <v-pagination 
+        v-model="page"
+        :length="leng"
+        @input="list_req"
+      ></v-pagination>
+    </v-footer>
   </div>
 </template>
 
@@ -45,25 +43,59 @@
   export default {
     data: () => ({
       reviews: 413,
-      value: 4.5
+      value: 4.5,
+      page: 1,
+      leng: 0,
+      val: 0,
     }),
     computed: {
-
+      l_product() {
+        return this.$store.getters.l_product
+      },
+      p_length() {
+        return this.$store.getters.p_length
+      }
     },
     mounted() {
-      this.$store.dispatch('l_product', '')
+      this.$store.dispatch('l_product', {
+        page: (this.page-1)*10
+      })
+      .then(() => {
+        this.leng = parseInt(this.p_length)
+      })
     },
     methods: {
-      productDetail() {
-        this.$router.push('/product')
+      productDetail(no) {
+        this.$router.push('/product/'+no)
+      },
+      list_req() {
+        this.$store.dispatch('l_product', {
+          page: (this.page-1)*10
+        })
+        .then((res) => {
+          console.log(res)
+        })
       }
     }
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.product_list_container {
+  text-align: center;
+}
 .product {
   position: relative;
+  display: inline-block;
+  margin: 10px 10px!important;
+}
+.page_div {
+  display: block;
+  height: 45px!important;
+  text-align: center!important;
+}
+.block_box {
+  display: block;
 }
 
 .float_right {

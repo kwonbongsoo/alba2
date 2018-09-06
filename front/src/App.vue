@@ -7,17 +7,13 @@
       fixed
       app
     >
-      <v-list>
-        <v-list-tile
-          value="true"
-          v-for="(item, i) in items"
-          :key="i"
-        >
+      <v-list dense>
+        <v-list-tile @click="productListGo">
           <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
+            <v-icon>dashboard</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
+            <v-list-tile-title>상품</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -32,9 +28,6 @@
     <v-content>
       <router-view class="router_view"/>
     </v-content>
-    <v-footer app>
-      <span>&copy; 2018</span>
-    </v-footer>
   </v-app>
 </template>
 
@@ -45,13 +38,14 @@ export default {
   data () {
     return {
       drawer: false,
-      items: [{
-        icon: 'bubble_chart',
-        title: 'Inspire'
-      }],
       right: true,
       rightDrawer: false,
       title: 'Vuetify.js'
+    }
+  },
+  methods: {
+    productListGo() {
+      this.$router.push('/productList')
     }
   }
 }

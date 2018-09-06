@@ -24,7 +24,8 @@ router.get('/list', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
   res.setHeader("Access-Control-Allow-Origin", "*")
   // res.send('respond with a resource');
-  productDB.get((result) => {
+  let page = req.query.page;
+  productDB.get(page, (result) => {
     res.json(result)
   })
 });
@@ -41,9 +42,34 @@ router.get('/add', function(req, res, next) {
   let name = req.query.name
   let price = req.query.price
 
-  console.log(price)
   productDB.add(name, desc, price, (result) => {
     res.json(result)
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end('error')
+  })
+});
+
+router.get('/detail', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  // res.send('respond with a resource');
+  
+  let p_no = req.query.no
+  productDB.getOne(p_no, (result) => {
+    let tmp = result;
+
+    productDB.detail(p_no, (result) => {
+      tmp.optins = result;
+      res.json(tmp)
+    }, (error) => {
+      res.status(200)
+              .set('Content-Type', 'text/plain;charset=UTF-8')
+              .end('error')
+    })
   }, (error) => {
     res.status(200)
             .set('Content-Type', 'text/plain;charset=UTF-8')
