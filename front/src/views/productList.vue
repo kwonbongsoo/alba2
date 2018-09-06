@@ -1,6 +1,6 @@
 <template>
   <div class="product_list_container">
-    <v-hover class="product" v-for="product in l_product">
+    <v-hover class="product" v-for="(product, index) in l_product" :key="index">
       <v-card 
         slot-scope="{ hover }"
         :class="`elevation-${hover ? 12 : 2}`"
