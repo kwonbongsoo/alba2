@@ -5,7 +5,9 @@ import { resolve } from 'path';
 import axios from 'axios'
 
 Vue.use(Vuex)
+// const api_url = "http://52.79.236.19:3000/"
 const api_url = "http://127.0.0.1:3000/"
+
 export default new Vuex.Store({
   state: {
     l_product: '',
