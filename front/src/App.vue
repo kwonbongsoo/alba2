@@ -24,6 +24,7 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn v-show="add_product_btn" color="info" @click="productAddGo">새 상품 등록</v-btn>
     </v-toolbar>
     <v-content>
       <router-view class="router_view"/>
@@ -43,17 +44,31 @@ export default {
       title: 'Vuetify.js'
     }
   },
+  computed: {
+    add_product_btn() {
+      return this.$store.getters.add_product_btn;
+    }
+  },
   methods: {
     productListGo() {
       this.$router.push('/productList')
-    }
+    },
+    productAddGo() {
+      this.$router.push('/product/'+0)
+    },
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .router_view {
-  margin-top: 20px;
+  margin: 20px 0;
+}
+.v-toolbar {
+  z-index: 3;
+}
+.v-navigation-drawer {
+  z-index: 4;
 }
 </style>
 

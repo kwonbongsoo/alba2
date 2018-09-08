@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="proudct_container">
     <form>
       <v-text-field
         v-model="name"
@@ -22,7 +22,7 @@
       <v-text-field
         v-model="price"
         :error-messages="priceErrors"
-        :counter="20"
+        :counter="10"
         label="가격"
         required
         @input="$v.price.$touch()"
@@ -31,12 +31,45 @@
       <v-select
         v-model="select"
         :items="items"
-        :error-messages="selectErrors"
-        label="옵션"
-        required
-        @change="$v.select.$touch()"
-        @blur="$v.select.$touch()"
+        item-text="title"
+        item-value="no"
+        label="옵션을 선택하세요 옵션이 없다면 추가하세요"
+        @change="pushOption"
       ></v-select>
+
+
+      
+      <v-list
+          v-for="item in optionArr"
+          :key="item.title"
+          v-model="item.active"
+          >
+          <v-list-tile>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}
+                <v-icon class="right" @click="popOption(item.no)">clear</v-icon>
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile class="padding_option"
+            v-for="subItem in item.option"
+            :key="subItem.name"
+          >
+            <v-list-tile-content class="left">
+              <v-list-tile-title>{{ subItem.name }}</v-list-tile-title>
+            </v-list-tile-content>
+
+            <v-list-tile-content class="right">
+              <v-list-tile-title>{{ subItem.price }}원</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+      </v-list>
+
+      <div class="top_margin">
+        <v-btn @click="optionClick">옵션 등록 / 수정</v-btn>
+      </div>
+
       <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
 					<div class="img_div">
             <img :src="imageUrl" height="150" v-if="imageUrl"/>
@@ -51,9 +84,11 @@
 						@change="onFilePicked"
 					>
 				</v-flex>
+        <v-switch :label="`정상판매 / 품절 : ${sold_yn ? '정상판매': '품절'}`" v-model="sold_yn"></v-switch>
 
       <v-btn @click="submit">상품등록/수정</v-btn>
-      <v-btn @click="clear">clear</v-btn>
+      <v-btn v-show="this.no == 0" @click="clear">clear</v-btn>
+      <option-modal v-if="option_dialog" :l_option="l_option"/>
     </form>
   </div>
 </template>
@@ -61,6 +96,7 @@
 <script>
   import { validationMixin } from 'vuelidate'
   import { required, maxLength } from 'vuelidate/lib/validators'
+  import optionModal from '../components/optionModal'
 
   export default {
     mixins: [validationMixin],
@@ -68,33 +104,28 @@
     validations: {
       name: { required, maxLength: maxLength(10) },
       desc: { required,  maxLength: maxLength(20) },
-      price: { required, maxLength: maxLength(20) },
-      select: { required }
+      price: { required, maxLength: maxLength(20) }
+    },
+    components: {
+      optionModal
     },
 
     data: () => ({
+      no: '',
       name: '',
       desc: '',
       price: '',
       select: null,
-      items: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4'
-      ],
+      items: [],
       imageName: '',
       imageUrl: '',
       imageFile: '',
-      inputFileValue: ''
+      inputFileValue: '',
+      optionArr: [],
+      optionSubmit: '',
+      sold_yn: '',
     }),
     computed: {
-      selectErrors () {
-        const errors = []
-        if (!this.$v.select.$dirty) return errors
-        !this.$v.select.required && errors.push('옵션을 입력하세요')
-        return errors
-      },
       nameErrors () {
         const errors = []
         if (!this.$v.name.$dirty) return errors
@@ -115,22 +146,42 @@
         !this.$v.price.maxLength && errors.push('상품 가격이 너무 깁니다')
         !this.$v.price.required && errors.push('상품 가격을 입력하세요')
         return errors
-      }
+      },
+      option_dialog () {
+        return this.$store.getters.option_dialog;
+      },
+      l_option() {
+        return this.$store.getters.l_option;
+      },
     },
     mounted() {
-
-      let params = {
-        no: this.$route.params.no
+      this.$store.commit('add_product_btn', false)
+      if(this.$route.params.no != 0) {
+        let params = {
+          no: this.$route.params.no
+        }
+        this.$store.dispatch('product_detail', params)
+        .then((res) => {
+          console.log(res)
+          this.no = res.no
+          this.name = res.name
+          this.desc = res.desc
+          this.price = res.price
+          this.optionArr = res.options
+          // this.imageName = res.img_name
+          // this.imageUrl = res.img_url
+          if (res.sold_yn == 'Y')
+            this.sold_yn = false
+          else
+            this.sold_yn = true
+        })
       }
-      this.$store.dispatch('product_detail', params)
+      this.$store.dispatch('l_option', '')
       .then((res) => {
-        console.log(res)
+        this.items = this.l_option
       })
     },
     methods: {
-      submit () {
-        this.$v.$touch()
-      },
       clear () {
         this.$v.$reset()
         this.name = ''
@@ -140,6 +191,14 @@
         this.imageName = ''
         this.imageFile = ''
         this.imageUrl = ''
+        this.optionArr = [],
+        this.optionSubmit = '',
+        this.sold_yn = ''
+
+        this.$store.dispatch('l_option', '')
+        .then((res) => {
+          this.items = this.l_option
+        })
       },
       pickFile () {
         this.$refs.image.click ()
@@ -170,12 +229,72 @@
         this.imageUrl = ''
       },
       submit() {
-        let params = {
-          name: this.name,
-          desc: this.desc,
-          price: this.price
+        if (this.name == '') {
+          alert('상품 이름을 입력하세요')
         }
-        this.$store.dispatch('add_product', params);
+        else if (this.desc == '') {
+          alert('상품 설명을 입력하세요')
+        }
+        else if (this.price == '') {
+          alert('상품 가격을 입력하세요')
+        }
+        else if (this.imageFile.size > 1000000) {
+          alert('이미지 사이즈가 큽니다. 1M 이하로 업로드하세요')
+        }
+        else if (this.imageName == '') {
+          alert('이미지를 선택해주세요.')
+        }
+        else {
+          this.optionSubmit = ''
+          for (let i = 0; i < this.optionArr.length; i++) {
+            this.optionSubmit += this.optionArr[i].no +','
+          }
+          let params = {
+            imageName: this.imageName,
+            imageUrl: this.imageUrl,
+            imageFile: this.imageFile,
+            name: this.name,
+            desc: this.desc,
+            price: this.price,
+            option: this.optionSubmit,
+            no: this.$route.params.no,
+            sold_yn: this.sold_yn == true ? 'Y' : 'N'
+          }
+          console.log(params)
+
+          var formData = new FormData();
+
+          formData.append('file', this.imageFile);
+          formData.append('imageName', this.imageName);
+          formData.append('imageUrl', this.imageUrl);
+          formData.append('name', this.name);
+          formData.append('desc', this.desc);
+          formData.append('price', this.price);
+          formData.append('option', this.optionSubmit)
+          formData.append('no', this.$route.params.no)
+
+          
+        }
+        
+        // this.$store.dispatch('add_product', params);
+      },
+      pushOption(no) {
+        if (this.select != '') {
+          let index = this.items.map(function (arr) { return arr.no; }).indexOf(no)
+          if (this.optionArr.map(function (arr) { return arr.no; }).indexOf(this.items[index].no) == -1 )
+            this.optionArr.push(this.items[index])
+        }
+        this.$nextTick(() => {
+          this.select = '';
+        })
+      },
+      popOption(no) {
+        let index = this.optionArr.map(function (arr) { return arr.no; }).indexOf(no)
+        this.optionArr.splice(index, 1)
+        this.select = '';
+      },
+      optionClick() {
+        this.$store.commit('option_dialog', true)
       }
     }
   }
@@ -186,6 +305,9 @@
   position: relative;
   display: inline-block;
 }
+.proudct_container {
+  padding: 20px;
+}
 .clear_icon {
   position:absolute;
   right: 0;
@@ -194,4 +316,20 @@
   font-weight: bold;
   z-index: 2;
 }
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+.right * {
+  text-align: right!important;
+}
+.padding_option {
+  padding: 0 20px;
+}
+.top_margin {
+  margin-top: 20px;
+}
+
 </style>

@@ -5,7 +5,7 @@ module.exports = {
     this.connection = conn // 변수를 알아서 만들어준다.
   },
 
-  get(page, successFn, errorFn) {
+  l_product(page, successFn, errorFn) {
     this.connection.query(
         'CALL l_product(?)',
         [page],
@@ -54,6 +54,17 @@ module.exports = {
         }
       })
   },
+  l_option(successFn, errorFn) {
+    this.connection.query(
+        'CALL l_option()',
+      function (error, result) {
+        if (error) {
+          errorFn(error)
+        } else {
+          successFn(result[0])
+        }
+      })
+  }
 //   update(name, price, price1, imageName, img_path, no, successFn, errorFn) {
 //     this.connection.query(
 //       'update product set name = ?, price = ?, price1 = ?, imageName = ?, img_path = ? where no = ?',

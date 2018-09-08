@@ -1,12 +1,17 @@
 <template>
   <div class="product_list_container">
+    
     <v-hover class="product" v-for="(product, index) in l_product" :key="index">
+      
       <v-card 
         slot-scope="{ hover }"
         :class="`elevation-${hover ? 12 : 2}`"
         class="mx-auto"
         width="344"
       >
+      <div v-if="product.sold_yn == 'Y'" class="sold_out">
+        <span>준비중</span>
+      </div>
         <v-btn icon class="mr-0 float_right">
           <v-icon>clear</v-icon>
         </v-btn>
@@ -25,9 +30,9 @@
             </div>
           </div>
           <v-spacer></v-spacer>
-          <span>{{l_product.price}}</span>
         </v-card-title>
       </v-card>
+      
     </v-hover>
     <v-footer app class="page_div">
         <v-pagination 
@@ -57,6 +62,7 @@
       }
     },
     mounted() {
+      this.$store.commit('add_product_btn', true)
       this.$store.dispatch('l_product', {
         page: (this.page-1)*10
       })
@@ -91,7 +97,7 @@
 }
 .page_div {
   display: block;
-  height: 45px!important;
+  height: 40px!important;
   text-align: center!important;
 }
 .block_box {
@@ -102,5 +108,20 @@
   position: absolute;
   z-index: 2;
   right: 0;
+}
+.sold_out {
+  width:100%;
+  position: absolute;
+  color: white;
+  background-color: rgba(0, 0, 0, .7);
+  height: 290px;
+}
+.sold_out > span {
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  font-weight: bold;
+  font-size: 30px;
+  z-index: 100;
 }
 </style>

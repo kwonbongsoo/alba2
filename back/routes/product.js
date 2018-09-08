@@ -18,15 +18,51 @@ const upload = multer({ storage: memorystorage })
 const sharp = require('sharp');
 
 /* GET users listing. */
-router.get('/list', function(req, res, next) {
+router.get('/l_product', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
   res.setHeader("Access-Control-Max-Age", "3600")
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
   res.setHeader("Access-Control-Allow-Origin", "*")
   // res.send('respond with a resource');
   let page = req.query.page;
-  productDB.get(page, (result) => {
+  productDB.l_product(page, (result) => {
     res.json(result)
+  })
+});
+
+
+router.get('/l_option', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  // res.send('respond with a resource');
+  productDB.l_option((result) => {
+    
+    let arr = []
+    let obj
+    let options = []
+
+      for(let i = 0; i < result.length; i++) {
+        // console.log(result[i])
+        result[i].o_name_list = result[i].o_name_list.split(',')
+        result[i].o_price_list = result[i].o_price_list.split(',')
+        obj = {
+          title: result[i].title,
+          no: result[i].no,
+          multi_yn: result[i].multi_yn,
+          option: [],
+        }
+        for (let k = 0; k < result[i].o_name_list.length; k++) {
+          arr = {
+            name: result[i].o_name_list[k],
+            price: result[i].o_price_list[k]
+          }
+          obj.option.push(arr)
+        }
+        options.push(obj)
+      }
+    res.json(options)
   })
 });
 
@@ -63,7 +99,29 @@ router.get('/detail', function(req, res, next) {
     let tmp = result;
 
     productDB.detail(p_no, (result) => {
-      tmp.optins = result;
+      let arr = []
+      let obj
+      tmp.options = []
+
+      for(let i = 0; i < result.length; i++) {
+        // console.log(result[i])
+        result[i].o_name_list = result[i].o_name_list.split(',')
+        result[i].o_price_list = result[i].o_price_list.split(',')
+        obj = {
+          title: result[i].title,
+          no: result[i].no,
+          multi_yn: result[i].multi_yn,
+          option: [],
+        }
+        for (let k = 0; k < result[i].o_name_list.length; k++) {
+          arr = {
+            name: result[i].o_name_list[k],
+            price: result[i].o_price_list[k]
+          }
+          obj.option.push(arr)
+        }
+        tmp.options.push(obj)
+      }
       res.json(tmp)
     }, (error) => {
       res.status(200)
