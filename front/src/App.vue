@@ -29,6 +29,12 @@
     <v-content>
       <router-view class="router_view"/>
     </v-content>
+    <v-progress-circular
+      v-if="progress"
+      :size="50"
+      color="primary"
+      indeterminate
+    ></v-progress-circular>
   </v-app>
 </template>
 
@@ -47,6 +53,9 @@ export default {
   computed: {
     add_product_btn() {
       return this.$store.getters.add_product_btn;
+    },
+    progress() {
+      return this.$store.getters.progress;
     }
   },
   methods: {
@@ -70,5 +79,18 @@ export default {
 .v-navigation-drawer {
   z-index: 4;
 }
+.v-progress-circular {
+  position: fixed  !important;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: visible;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
 </style>
 

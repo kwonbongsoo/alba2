@@ -17,10 +17,23 @@ module.exports = {
         }
       })
   },
-  add(name, desc, price, successFn, errorFn) {
+  add(name, price, desc, sold_yn, option, imageName, img_path, successFn, errorFn) {
     this.connection.query(
-      'CALL add_product(?, ?, ?)',
-      [name, desc, price],
+      'CALL add_product(?, ?, ?, ?, ?, ?, ?)',
+      [name, price, desc, sold_yn, option, imageName, img_path],
+      function (error, result) {
+        console.log(error)
+        if (error) {
+          errorFn(error)
+        } else {
+          successFn(result)
+        }
+      })
+  },
+  update(no ,name, price, desc, sold_yn, option, imageName, img_path, successFn, errorFn) {
+    this.connection.query(
+      'CALL update_product(?, ?, ?, ?, ?, ?, ?, ?)',
+      [no, name, price, desc, sold_yn, option, imageName, img_path],
       function (error, result) {
         console.log(error)
         if (error) {
@@ -64,7 +77,21 @@ module.exports = {
           successFn(result[0])
         }
       })
+  },
+
+  d_product(no, successFn, errorFn) {
+    this.connection.query(
+      'CALL d_product(?)',
+      [no],
+      function (error, result) {
+        if (error) {
+          errorFn(error)
+        } else {
+          successFn(result)
+        }
+      })
   }
+
 //   update(name, price, price1, imageName, img_path, no, successFn, errorFn) {
 //     this.connection.query(
 //       'update product set name = ?, price = ?, price1 = ?, imageName = ?, img_path = ? where no = ?',
@@ -77,17 +104,6 @@ module.exports = {
 //         }
 //       })
 //   },
-//   delete(no, successFn, errorFn) {
-//     this.connection.query(
-//       'delete from product where no = ?',
-//       [no],
-//       function (error, result) {
-//         if (error) {
-//           errorFn(error)
-//         } else {
-//           successFn(result)
-//         }
-//       })
-//   }
+
   
 } // module

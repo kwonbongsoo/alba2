@@ -36,13 +36,10 @@
         label="옵션을 선택하세요 옵션이 없다면 추가하세요"
         @change="pushOption"
       ></v-select>
-
-
       
       <v-list
           v-for="item in optionArr"
           :key="item.title"
-          v-model="item.active"
           >
           <v-list-tile>
             <v-list-tile-content>
@@ -84,7 +81,7 @@
 						@change="onFilePicked"
 					>
 				</v-flex>
-        <v-switch :label="`정상판매 / 품절 : ${sold_yn ? '정상판매': '품절'}`" v-model="sold_yn"></v-switch>
+        <v-switch :label="`품절 : ${sold_yn.toString()}`" v-model="sold_yn"></v-switch>
 
       <v-btn @click="submit">상품등록/수정</v-btn>
       <v-btn v-show="this.no == 0" @click="clear">clear</v-btn>
@@ -124,6 +121,7 @@
       optionArr: [],
       optionSubmit: '',
       sold_yn: '',
+      original_name: '',
     }),
     computed: {
       nameErrors () {
@@ -168,12 +166,13 @@
           this.desc = res.desc
           this.price = res.price
           this.optionArr = res.options
-          // this.imageName = res.img_name
-          // this.imageUrl = res.img_url
+          this.imageName = res.img_name
+          this.imageUrl = res.img_url
           if (res.sold_yn == 'Y')
-            this.sold_yn = false
-          else
             this.sold_yn = true
+          else
+            this.sold_yn = false
+          this.original_name = res.img_name
         })
       }
       this.$store.dispatch('l_option', '')
@@ -191,9 +190,10 @@
         this.imageName = ''
         this.imageFile = ''
         this.imageUrl = ''
-        this.optionArr = [],
-        this.optionSubmit = '',
+        this.optionArr = []
+        this.optionSubmit = ''
         this.sold_yn = ''
+        this.original_name = ''
 
         this.$store.dispatch('l_option', '')
         .then((res) => {
@@ -241,7 +241,7 @@
         else if (this.imageFile.size > 1000000) {
           alert('이미지 사이즈가 큽니다. 1M 이하로 업로드하세요')
         }
-        else if (this.imageName == '') {
+        else if (this.$route.params.no != '0' && this.imageName == '') {
           alert('이미지를 선택해주세요.')
         }
         else {
@@ -258,7 +258,8 @@
             price: this.price,
             option: this.optionSubmit,
             no: this.$route.params.no,
-            sold_yn: this.sold_yn == true ? 'Y' : 'N'
+            sold_yn: this.sold_yn == true ? 'Y' : 'N',
+            original_name: this.original_name
           }
           console.log(params)
 
@@ -272,11 +273,20 @@
           formData.append('price', this.price);
           formData.append('option', this.optionSubmit)
           formData.append('no', this.$route.params.no)
+          formData.append('sold_yn', this.sold_yn == true ? 'Y' : 'N')
+          formData.append('original_name', this.original_name)
 
-          
+
+          this.$store.commit('progress', true)
+          this.$store.dispatch('add_update_product', formData)
+          .then((res) => {
+            console.log(res)
+            this.$store.commit('progress', false)
+            this.$router.push('/productList')
+          })
+
         }
         
-        // this.$store.dispatch('add_product', params);
       },
       pushOption(no) {
         if (this.select != '') {

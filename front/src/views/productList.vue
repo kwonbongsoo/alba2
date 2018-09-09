@@ -12,12 +12,12 @@
       <div v-if="product.sold_yn == 'Y'" class="sold_out">
         <span>준비중</span>
       </div>
-        <v-btn icon class="mr-0 float_right">
+        <v-btn icon class="mr-0 float_right" @click="d_product(product.no, product.img_name)">
           <v-icon>clear</v-icon>
         </v-btn>
         <v-img @click="productDetail(product.no)"
           :aspect-ratio="16/9"
-          src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+          :src="product.img_url"
         />
         
         <v-card-title class="block_box" @click="productDetail(product.no)">
@@ -80,6 +80,22 @@
         })
         .then((res) => {
           console.log(res)
+        })
+      },
+      d_product(no, img_name) {
+        let params = {
+          no: no,
+          original_name : img_name
+        }
+        this.$store.dispatch('d_product', params)
+        .then((res) => {
+          console.log(res)
+          this.$store.dispatch('l_product', {
+            page: (this.page-1)*10
+          })
+          .then(() => {
+            this.leng = parseInt(this.p_length)
+          })
         })
       }
     }

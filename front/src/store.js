@@ -15,6 +15,7 @@ export default new Vuex.Store({
     p_length: 1,
     add_product_btn: false,
     option_dialog: false,
+    progress: false,
   },
 
   getters: {
@@ -33,6 +34,9 @@ export default new Vuex.Store({
     option_dialog: function(state) {
       return state.option_dialog
     },
+    progress: function(state) {
+      return state.progress
+    }
   },
 
   mutations: {
@@ -57,6 +61,9 @@ export default new Vuex.Store({
     option_dialog: (state, option_dialog) => {
       state.option_dialog = option_dialog
     },
+    progress: (state, progress) => {
+      state.progress = progress
+    },
       
   },
 
@@ -76,17 +83,17 @@ export default new Vuex.Store({
       })
     },
 
-    add_product: (context, params) => {
+    add_update_product: (context, params) => {
       return new Promise((resolve, reject) => {
-        axios({
-          method: 'get',
-          params: params,
-          url: api_url + 'product/add',
-          responseType: 'json'
+        axios.post( api_url + 'product/add_update',
+          params, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
         })
         .then((res) => {
-          console.log(res.data)
-        })
+          resolve(res.data);
+        });
       })
     },
 
@@ -114,6 +121,19 @@ export default new Vuex.Store({
         })
         .then((res) => {
           context.commit('l_option', res.data)
+          resolve(res.data)
+        })
+      })
+    },
+    d_product: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'product/d_product',
+          responseType: 'json'
+        })
+        .then((res) => {
           resolve(res.data)
         })
       })
