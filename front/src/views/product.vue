@@ -175,7 +175,6 @@
       }
     },
     mounted() {
-      console.log(this.product)
       this.$store.commit('add_product_btn', false)
       if (this.product != '') {
         this.l_option = this.product.options
@@ -303,6 +302,9 @@
           this.l_option[this.l_o_idx].name = this.option_name
           this.l_option[this.l_o_idx].price = this.option_price
         }
+        else if (this.option_name == '' || this.option_price == '') {
+          return
+        }
         else {
           let dup = true
           if (this.l_option.length > 0) {
@@ -324,7 +326,6 @@
         }
       },
       d_option(no) {
-        console.log(no)
         let d_index = -1
         for(let i = 0; i < this.l_option.length; i++) {
           if (this.l_option[i].option_no == no) {
@@ -336,7 +337,6 @@
           this.l_option.splice(d_index, 1)
       },
       optionClick(item, index) {
-        console.log(index)
         if(item.option_no != this.activeTab) {
           this.activeTab = item.option_no
           this.option_name = item.name

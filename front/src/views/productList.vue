@@ -133,7 +133,7 @@
   position: absolute;
   color: white;
   background-color: rgba(0, 0, 0, .7);
-  height: 290px;
+  height: 325px;
 }
 .sold_out > span {
   position: absolute;
