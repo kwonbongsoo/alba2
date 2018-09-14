@@ -109,7 +109,7 @@
 <script>
   import { validationMixin } from 'vuelidate'
   import { required, maxLength } from 'vuelidate/lib/validators'
-  import optionModal from '../components/optionModal'
+
 
   export default {
     mixins: [validationMixin],
@@ -118,9 +118,6 @@
       name: { required, maxLength: maxLength(10) },
       desc: { required,  maxLength: maxLength(20) },
       price: { required, maxLength: maxLength(20) }
-    },
-    components: {
-      optionModal
     },
 
     data: () => ({
@@ -181,7 +178,7 @@
         this.name = this.product.name
         this.desc = this.product.desc
         this.price = this.product.price
-        this.sold_yn = this.product.sold_yn
+        this.sold_yn = this.product.sold_yn == 'Y' ? true : false
         this.imageName = this.product.img_name
         this.imageUrl = this.product.img_url
         this.no = this.product.no

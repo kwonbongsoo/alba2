@@ -4,8 +4,10 @@
       persistent
       v-model="drawer"
       enable-resize-watcher
+      hide-overlay
       fixed
       app
+      class="high_sky_plus"
     >
       <v-list dense>
         <v-list-tile @click="productListGo">
@@ -20,6 +22,7 @@
     </v-navigation-drawer>
     <v-toolbar
       app
+      class="high_sky"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
@@ -39,9 +42,14 @@
 </template>
 
 <script>
-
+import optionModal from '../components/optionModal'
 export default {
-  name: 'App',
+  name: 'App',    
+  
+  components: {
+    optionModal
+  },
+
   data () {
     return {
       drawer: false,
@@ -90,6 +98,12 @@ export default {
   left: 0;
   bottom: 0;
   right: 0;
+}
+.high_sky {
+  z-index: 11;
+}
+.high_sky_plus {
+  z-index: 12;
 }
 
 </style>

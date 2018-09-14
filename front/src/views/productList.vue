@@ -9,11 +9,11 @@
         class="mx-auto"
         width="344"
       >
-      <div v-if="product.sold_yn == 'Y'" class="sold_out">
+      <div v-if="product.sold_yn == 'Y'" @click="productDetail(product)" class="sold_out">
         <span>준비중</span>
       </div>
         <v-btn icon class="mr-0 float_right" @click="d_product(product.no, product.img_name)">
-          <v-icon>clear</v-icon>
+          <v-icon class="red_icon">clear</v-icon>
         </v-btn>
         <v-img @click="productDetail(product)"
           :aspect-ratio="1.5/1"
@@ -117,6 +117,7 @@
   display: block;
   height: 40px!important;
   text-align: center!important;
+  z-index: 11;
   
 }
 .block_box {
@@ -141,6 +142,10 @@
   right: 10%;
   font-weight: bold;
   font-size: 30px;
-  z-index: 100;
+  z-index: 10;
+}
+.red_icon {
+  color: red!important;
+  font-weight: bold;
 }
 </style>
