@@ -16,7 +16,7 @@
           <v-icon>clear</v-icon>
         </v-btn>
         <v-img @click="productDetail(product)"
-          :aspect-ratio="16/9"
+          :aspect-ratio="1.5/1"
           :src="product.img_url"
         />
         

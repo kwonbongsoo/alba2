@@ -29,7 +29,7 @@ router.get('/l_product', function(req, res, next) {
     let arr = []
     let tmp, option_names, option_prices, option_no, option_arr = []
     for (let i = 0; i < result.length;  i++) {
-      console.log(result[i])
+      // console.log(result[i])
       if(result[i].option_names) {
         option_names = result[i].option_names.split(',')
         option_prices = result[i].option_price.split(',')
@@ -130,7 +130,8 @@ function(req, res, next) {
       price : req.body.price,
       desc : req.body.desc,
       sold_yn : req.body.sold_yn,
-      option : req.body.option,
+      o_name : req.body.o_name,
+      o_price : req.body.o_price,
       original_name : req.body.original_name,
       req : req,
       res : res

@@ -24,6 +24,7 @@
         :error-messages="priceErrors"
         :counter="10"
         label="가격"
+        type="number"
         required
         @input="$v.price.$touch()"
         @blur="$v.price.$touch()"
@@ -36,14 +37,14 @@
         <v-container>
           <v-layout row wrap>
 
-            <v-flex xs4 sm6 md3>
+            <v-flex xs4 sm4 md3>
               <v-text-field
                v-model="option_name"
                 label="옵션 이름"
               ></v-text-field>
             </v-flex>
 
-            <v-flex xs4 sm6 md3>
+            <v-flex xs4 sm4 md3>
               <v-text-field
                 v-model="option_price"
                 type="number"
@@ -51,7 +52,7 @@
               ></v-text-field>
             </v-flex>
 
-             <v-flex xs4 sm6 md3>
+             <v-flex xs4 sm3 md3>
               <v-btn class="little_top_margin" @click="add_modify_option">등록/수정</v-btn>
             </v-flex>
 
