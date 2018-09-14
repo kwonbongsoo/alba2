@@ -26,43 +26,40 @@ router.get('/l_product', function(req, res, next) {
   // res.send('respond with a resource');
   let page = req.query.page;
   productDB.l_product(page, (result) => {
-    res.json(result)
-  })
-});
-
-
-router.get('/l_option', function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
-  res.setHeader("Access-Control-Max-Age", "3600")
-  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
-  res.setHeader("Access-Control-Allow-Origin", "*")
-  // res.send('respond with a resource');
-  productDB.l_option((result) => {
-    
     let arr = []
-    let obj
-    let options = []
-
-      for(let i = 0; i < result.length; i++) {
-        // console.log(result[i])
-        result[i].o_name_list = result[i].o_name_list.split(',')
-        result[i].o_price_list = result[i].o_price_list.split(',')
-        obj = {
-          title: result[i].title,
-          no: result[i].no,
-          multi_yn: result[i].multi_yn,
-          option: [],
-        }
-        for (let k = 0; k < result[i].o_name_list.length; k++) {
-          arr = {
-            name: result[i].o_name_list[k],
-            price: result[i].o_price_list[k]
+    let tmp, option_names, option_prices, option_no, option_arr = []
+    for (let i = 0; i < result.length;  i++) {
+      console.log(result[i])
+      if(result[i].option_names) {
+        option_names = result[i].option_names.split(',')
+        option_prices = result[i].option_price.split(',')
+        option_no = result[i].option_no.split(',')
+        for(let j = 0; j < option_names.length; j++) {
+          tmp = {
+            name : option_names[j],
+            price : option_prices[j],
+            option_no : option_no[j]
           }
-          obj.option.push(arr)
+          option_arr.push(tmp)
         }
-        options.push(obj)
       }
-    res.json(options)
+
+      
+      tmp = {
+        desc: result[i].desc,
+        img_name : result[i].img_name,
+        img_url : result[i].img_url,
+        name : result[i].name,
+        no : result[i].no,
+        price : result[i].price,
+        sold_yn : result[i].sold_yn,
+        total: result[i].total,
+        options: option_arr
+      }
+      arr.push(tmp)
+      option_arr = []
+    }
+    res.json(arr)
   })
 });
 
@@ -108,7 +105,8 @@ function(req, res, next) {
           price : req.body.price,
           desc : req.body.desc,
           sold_yn : req.body.sold_yn,
-          option : req.body.option,
+          o_name : req.body.o_name,
+          o_price : req.body.o_price,
           original_name : req.body.original_name,
           req : req,
           res : res
@@ -137,7 +135,7 @@ function(req, res, next) {
       req : req,
       res : res
     }
-    productDB.update(params.no, params.name, params.price, params.desc, params.sold_yn, params.option, params.imageName, params.img_path, (result) => {
+    productDB.update(params.no, params.name, params.price, params.desc, params.sold_yn, params.o_name, params.o_price, params.imageName, params.img_path, (result) => {
       console.log(result)
       params.res.json(result)
     }, (error) => {
@@ -147,55 +145,6 @@ function(req, res, next) {
     })
   }
 });
-
-router.get('/detail', function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
-  res.setHeader("Access-Control-Max-Age", "3600")
-  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
-  res.setHeader("Access-Control-Allow-Origin", "*")
-  // res.send('respond with a resource');
-  
-  let p_no = req.query.no
-  productDB.getOne(p_no, (result) => {
-    let tmp = result;
-
-    productDB.detail(p_no, (result) => {
-      let arr = []
-      let obj
-      tmp.options = []
-
-      for(let i = 0; i < result.length; i++) {
-        // console.log(result[i])
-        result[i].o_name_list = result[i].o_name_list.split(',')
-        result[i].o_price_list = result[i].o_price_list.split(',')
-        obj = {
-          title: result[i].title,
-          no: result[i].no,
-          multi_yn: result[i].multi_yn,
-          option: [],
-        }
-        for (let k = 0; k < result[i].o_name_list.length; k++) {
-          arr = {
-            name: result[i].o_name_list[k],
-            price: result[i].o_price_list[k]
-          }
-          obj.option.push(arr)
-        }
-        tmp.options.push(obj)
-      }
-      res.json(tmp)
-    }, (error) => {
-      res.status(200)
-              .set('Content-Type', 'text/plain;charset=UTF-8')
-              .end('error')
-    })
-  }, (error) => {
-    res.status(200)
-            .set('Content-Type', 'text/plain;charset=UTF-8')
-            .end('error')
-  })
-});
-
 
 router.get('/d_product', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
@@ -227,7 +176,7 @@ router.get('/d_product', function(req, res, next) {
 
 
 function product_add(params) {
-  productDB.add(params.name, params.price, params.desc, params.sold_yn, params.option, params.imageName, params.img_path, (result) => {
+  productDB.add(params.name, params.price, params.desc, params.sold_yn, params.o_name, params.o_price, params.imageName, params.img_path, (result) => {
     console.log(result)
     params.res.json(result)
   }, (error) => {
@@ -247,7 +196,7 @@ function product_update(params) {
 
   let deleteObj = new aws.S3();
   deleteObj.deleteObject(delete_params, (err, data) => {
-    productDB.update(params.no, params.name, params.price, params.desc, params.sold_yn, params.option, params.imageName, params.img_path, (result) => {
+    productDB.update(params.no, params.name, params.price, params.desc, params.sold_yn, params.o_name, params.o_price, params.imageName, params.img_path, (result) => {
       console.log(result)
       params.res.json(result)
     }, (error) => {

@@ -11,16 +11,17 @@ module.exports = {
         [page],
       function (error, result) {
         if (error) {
+          console.log(error)
           errorFn(error)
         } else {
           successFn(result[0])
         }
       })
   },
-  add(name, price, desc, sold_yn, option, imageName, img_path, successFn, errorFn) {
+  add(name, price, desc, sold_yn, o_name, o_price, imageName, img_path, successFn, errorFn) {
     this.connection.query(
-      'CALL add_product(?, ?, ?, ?, ?, ?, ?)',
-      [name, price, desc, sold_yn, option, imageName, img_path],
+      'CALL add_product(?, ?, ?, ?, ?, ?, ?, ?)',
+      [name, price, desc, sold_yn, o_name, o_price, imageName, img_path],
       function (error, result) {
         console.log(error)
         if (error) {
@@ -30,10 +31,10 @@ module.exports = {
         }
       })
   },
-  update(no ,name, price, desc, sold_yn, option, imageName, img_path, successFn, errorFn) {
+  update(no ,name, price, desc, sold_yn, o_name, o_price, imageName, img_path, successFn, errorFn) {
     this.connection.query(
-      'CALL update_product(?, ?, ?, ?, ?, ?, ?, ?)',
-      [no, name, price, desc, sold_yn, option, imageName, img_path],
+      'CALL update_product(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [no, name, price, desc, sold_yn, o_name, o_price, imageName, img_path],
       function (error, result) {
         console.log(error)
         if (error) {
@@ -59,17 +60,6 @@ module.exports = {
     this.connection.query(
         'select * from product where no = (?)',
         [p_no],
-      function (error, result) {
-        if (error) {
-          errorFn(error)
-        } else {
-          successFn(result[0])
-        }
-      })
-  },
-  l_option(successFn, errorFn) {
-    this.connection.query(
-        'CALL l_option()',
       function (error, result) {
         if (error) {
           errorFn(error)

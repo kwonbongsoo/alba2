@@ -28,43 +28,59 @@
         @input="$v.price.$touch()"
         @blur="$v.price.$touch()"
       ></v-text-field>
-      <v-select
-        v-model="select"
-        :items="items"
-        item-text="title"
-        item-value="no"
-        label="옵션을 선택하세요 옵션이 없다면 추가하세요"
-        @change="pushOption"
-      ></v-select>
-      
-      <v-list
-          v-for="item in optionArr"
-          :key="item.title"
-          >
-          <v-list-tile>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}
-                <v-icon class="right" @click="popOption(item.no)">clear</v-icon>
-              </v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
 
-          <v-list-tile class="padding_option"
-            v-for="subItem in item.option"
-            :key="subItem.name"
-          >
+      <div>
+        옵션 등록 및 수정
+      </div>
+      <v-form>
+        <v-container>
+          <v-layout row wrap>
+
+            <v-flex xs4 sm6 md3>
+              <v-text-field
+               v-model="option_name"
+                label="옵션 이름"
+              ></v-text-field>
+            </v-flex>
+
+            <v-flex xs4 sm6 md3>
+              <v-text-field
+                v-model="option_price"
+                type="number"
+                label="옵션 가격"
+              ></v-text-field>
+            </v-flex>
+
+             <v-flex xs4 sm6 md3>
+              <v-btn class="little_top_margin" @click="add_modify_option">등록/수정</v-btn>
+            </v-flex>
+
+          </v-layout>
+        </v-container>
+      </v-form>
+
+      <div>
+        옵션 목록
+      </div>
+
+      <div class="select_option_list">
+        <v-list
+        v-for="(item, index) in l_option"
+        :key="item.name"
+        >
+          <v-list-tile @click="optionClick(item, index)" :class= "{activeBack : activeTab == item.option_no }">
             <v-list-tile-content class="left">
-              <v-list-tile-title>{{ subItem.name }}</v-list-tile-title>
+              <v-list-tile-title>{{ item.name }}</v-list-tile-title>
             </v-list-tile-content>
-
             <v-list-tile-content class="right">
-              <v-list-tile-title>{{ subItem.price }}원</v-list-tile-title>
+              <v-list-tile-title>{{ item.price }}원</v-list-tile-title>
             </v-list-tile-content>
+            <span class="right margin_left" @click="d_option(item.option_no)">
+              <v-icon>clear</v-icon>
+            </span>
           </v-list-tile>
-      </v-list>
-
-      <div class="top_margin">
-        <v-btn @click="optionClick">옵션 등록 / 수정</v-btn>
+            
+        </v-list>
       </div>
 
       <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
@@ -85,7 +101,6 @@
 
       <v-btn @click="submit">상품등록/수정</v-btn>
       <v-btn v-show="this.no == 0" @click="clear">clear</v-btn>
-      <option-modal v-if="option_dialog" :l_option="l_option"/>
     </form>
   </div>
 </template>
@@ -108,7 +123,7 @@
     },
 
     data: () => ({
-      no: '',
+      no: 0,
       name: '',
       desc: '',
       price: '',
@@ -118,10 +133,16 @@
       imageUrl: '',
       imageFile: '',
       inputFileValue: '',
-      optionArr: [],
       optionSubmit: '',
       sold_yn: '',
       original_name: '',
+      l_option: [],
+      option_price: '',
+      option_name: '',
+      o_name: '',
+      o_price: '',
+      activeTab: '',
+      l_o_idx: -1,
     }),
     computed: {
       nameErrors () {
@@ -148,57 +169,40 @@
       option_dialog () {
         return this.$store.getters.option_dialog;
       },
-      l_option() {
-        return this.$store.getters.l_option;
-      },
+      product () {
+        return this.$store.getters.product;
+      }
     },
     mounted() {
+      console.log(this.product)
       this.$store.commit('add_product_btn', false)
-      if(this.$route.params.no != 0) {
-        let params = {
-          no: this.$route.params.no
-        }
-        this.$store.dispatch('product_detail', params)
-        .then((res) => {
-          console.log(res)
-          this.no = res.no
-          this.name = res.name
-          this.desc = res.desc
-          this.price = res.price
-          this.optionArr = res.options
-          this.imageName = res.img_name
-          this.imageUrl = res.img_url
-          if (res.sold_yn == 'Y')
-            this.sold_yn = true
-          else
-            this.sold_yn = false
-          this.original_name = res.img_name
-        })
-      }
-      this.$store.dispatch('l_option', '')
-      .then((res) => {
-        this.items = this.l_option
-      })
+      if (this.product != '') {
+        this.l_option = this.product.options
+        this.name = this.product.name
+        this.desc = this.product.desc
+        this.price = this.product.price
+        this.sold_yn = this.product.sold_yn
+        this.imageName = this.product.img_name
+        this.imageUrl = this.product.img_url
+        this.no = this.product.no
+      } 
+
     },
     methods: {
       clear () {
         this.$v.$reset()
         this.name = ''
         this.desc = ''
-        this.select = null
         this.$refs.image.value = null
         this.imageName = ''
         this.imageFile = ''
         this.imageUrl = ''
-        this.optionArr = []
-        this.optionSubmit = ''
         this.sold_yn = ''
         this.original_name = ''
+        this.l_option = []
+        this.o_name = ''
+        this.o_price = ''
 
-        this.$store.dispatch('l_option', '')
-        .then((res) => {
-          this.items = this.l_option
-        })
       },
       pickFile () {
         this.$refs.image.click ()
@@ -245,9 +249,10 @@
           alert('이미지를 선택해주세요.')
         }
         else {
-          this.optionSubmit = ''
-          for (let i = 0; i < this.optionArr.length; i++) {
-            this.optionSubmit += this.optionArr[i].no +','
+          console.log(this.l_option.length)
+          for (let i = 0; i < this.l_option.length; i++) {
+            this.o_name += this.l_option[i].name + ','
+            this.o_price += this.l_option[i].price + ','
           }
           let params = {
             imageName: this.imageName,
@@ -257,9 +262,11 @@
             desc: this.desc,
             price: this.price,
             option: this.optionSubmit,
-            no: this.$route.params.no,
+            no: this.no,
             sold_yn: this.sold_yn == true ? 'Y' : 'N',
-            original_name: this.original_name
+            original_name: this.original_name,
+            o_name : this.o_name,
+            o_price : this.o_price
           }
           console.log(params)
 
@@ -272,9 +279,11 @@
           formData.append('desc', this.desc);
           formData.append('price', this.price);
           formData.append('option', this.optionSubmit)
-          formData.append('no', this.$route.params.no)
+          formData.append('no', this.no)
           formData.append('sold_yn', this.sold_yn == true ? 'Y' : 'N')
           formData.append('original_name', this.original_name)
+          formData.append('o_name', this.o_name)
+          formData.append('o_price', this.o_price)
 
 
           this.$store.commit('progress', true)
@@ -288,23 +297,57 @@
         }
         
       },
-      pushOption(no) {
-        if (this.select != '') {
-          let index = this.items.map(function (arr) { return arr.no; }).indexOf(no)
-          if (this.optionArr.map(function (arr) { return arr.no; }).indexOf(this.items[index].no) == -1 )
-            this.optionArr.push(this.items[index])
+      add_modify_option() {
+        if (this.l_o_idx != -1) {
+          this.l_option[this.l_o_idx].name = this.option_name
+          this.l_option[this.l_o_idx].price = this.option_price
         }
-        this.$nextTick(() => {
-          this.select = '';
-        })
+        else {
+          let dup = true
+          if (this.l_option.length > 0) {
+            for( let i = 0; i < this.l_option.length ; i++) {
+              if (this.l_option[i].name == this.option_name) {
+                dup = false
+                break;
+              }
+            }
+          }
+          if (dup) {
+            this.l_option.push({
+              name: this.option_name,
+              price: this.option_price
+            })
+            this.option_name = ''
+            this.option_price = ''
+          }
+        }
       },
-      popOption(no) {
-        let index = this.optionArr.map(function (arr) { return arr.no; }).indexOf(no)
-        this.optionArr.splice(index, 1)
-        this.select = '';
+      d_option(no) {
+        console.log(no)
+        let d_index = -1
+        for(let i = 0; i < this.l_option.length; i++) {
+          if (this.l_option[i].option_no == no) {
+            d_index = i
+            break;
+          }
+        }
+        if (d_index != -1)
+          this.l_option.splice(d_index, 1)
       },
-      optionClick() {
-        this.$store.commit('option_dialog', true)
+      optionClick(item, index) {
+        console.log(index)
+        if(item.option_no != this.activeTab) {
+          this.activeTab = item.option_no
+          this.option_name = item.name
+          this.option_price = item.price
+          this.l_o_idx = index
+        }
+        else {
+          this.activeTab = ''
+          this.option_name = ''
+          this.option_price = ''
+          this.l_o_idx = -1
+        }
       }
     }
   }
@@ -338,8 +381,25 @@
 .padding_option {
   padding: 0 20px;
 }
-.top_margin {
-  margin-top: 20px;
+
+.container {
+  padding: 0;
+  margin: 0;
+}
+
+.little_top_margin {
+  margin-top: 16px;
+}
+
+.margin_left {
+  margin-left: 10px;
+}
+
+.activeBack {
+  background-color: white;
+}
+.activeBack *{
+  color: black;
 }
 
 </style>

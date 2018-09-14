@@ -63,7 +63,7 @@ export default {
       this.$router.push('/productList')
     },
     productAddGo() {
-      this.$router.push('/product/'+0)
+      this.$router.push('/product')
     },
   }
 }

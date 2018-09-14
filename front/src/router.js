@@ -14,7 +14,7 @@ export default new Router({
       component: productList
     },
     {
-      path: '/product/:no',
+      path: '/product',
       name: 'product',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route

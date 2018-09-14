@@ -3,15 +3,18 @@ import Vuex from 'vuex'
 import { isContext } from 'vm';
 import { resolve } from 'path';
 import axios from 'axios'
+import createPersistedState from 'vuex-persistedstate'
+
 
 Vue.use(Vuex)
 // const api_url = "http://52.79.236.19:3000/"
 const api_url = "http://127.0.0.1:3000/"
 
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
   state: {
     l_product: '',
-    l_option: '',
+    product: '',
     p_length: 1,
     add_product_btn: false,
     option_dialog: false,
@@ -22,8 +25,8 @@ export default new Vuex.Store({
     l_product: function(state) {
       return state.l_product
     },
-    l_option: function(state) {
-      return state.l_option
+    product: function(state) {
+      return state.product
     },
     p_length: function(state) {
       return state.p_length
@@ -51,9 +54,10 @@ export default new Vuex.Store({
           state.p_length = parseInt(length / 10)
         }
       }
+      console.log(l_product)
     },
-    l_option: (state, l_option) => {
-      state.l_option = l_option
+    product: (state, product) => {
+      state.product = product
     },
     add_product_btn: (state, add_product_btn) => {
       state.add_product_btn = add_product_btn
@@ -97,34 +101,6 @@ export default new Vuex.Store({
       })
     },
 
-    product_detail: (context, params) => {
-      return new Promise((resolve, reject) => {
-        axios({
-          method: 'get',
-          params: params,
-          url: api_url + 'product/detail',
-          responseType: 'json'
-        })
-        .then((res) => {
-          resolve(res.data)
-        })
-      })
-    },
-
-    l_option: (context, params) => {
-      return new Promise((resolve, reject) => {
-        axios({
-          method: 'get',
-          params: params,
-          url: api_url + 'product/l_option',
-          responseType: 'json'
-        })
-        .then((res) => {
-          context.commit('l_option', res.data)
-          resolve(res.data)
-        })
-      })
-    },
     d_product: (context, params) => {
       return new Promise((resolve, reject) => {
         axios({

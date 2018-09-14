@@ -15,12 +15,12 @@
         <v-btn icon class="mr-0 float_right" @click="d_product(product.no, product.img_name)">
           <v-icon>clear</v-icon>
         </v-btn>
-        <v-img @click="productDetail(product.no)"
+        <v-img @click="productDetail(product)"
           :aspect-ratio="16/9"
           :src="product.img_url"
         />
         
-        <v-card-title class="block_box" @click="productDetail(product.no)">
+        <v-card-title class="block_box" @click="productDetail(product)">
           <div>
             <span class="headline">{{product.name}}</span>
             <div class="d-flex">
@@ -62,6 +62,7 @@
       }
     },
     mounted() {
+      this.$store.commit('product', '')
       this.$store.commit('add_product_btn', true)
       this.$store.dispatch('l_product', {
         page: (this.page-1)*10
@@ -71,8 +72,9 @@
       })
     },
     methods: {
-      productDetail(no) {
-        this.$router.push('/product/'+no)
+      productDetail(product) {
+        this.$store.commit('product', product)
+        this.$router.push('/product')
       },
       list_req() {
         this.$store.dispatch('l_product', {
@@ -115,6 +117,7 @@
   display: block;
   height: 40px!important;
   text-align: center!important;
+  
 }
 .block_box {
   display: block;
