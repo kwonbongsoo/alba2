@@ -18,6 +18,14 @@
             <v-list-tile-title>상품</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile @click="productListGo">
+          <v-list-tile-action>
+            <v-icon>vpn_key</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>계정 비밀번호 변경</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
@@ -51,7 +59,7 @@ export default {
       drawer: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: 'NATURE AND HUMAN'
     }
   },
   computed: {

@@ -14,7 +14,7 @@ const router =  new Router({
       name: 'productList',
       component: productList,
       meta: {
-        auth: store.getters.alba2_login
+        auth: store.getters.alba2_login.login
       }
     },
     {
@@ -25,7 +25,7 @@ const router =  new Router({
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/product.vue'),
       meta: {
-        auth : store.getters.alba2_login
+        auth : store.getters.alba2_login.login
       }
     },
     {

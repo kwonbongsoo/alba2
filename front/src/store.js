@@ -7,7 +7,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 
 Vue.use(Vuex)
-const api_url = "https://admin.thehandsgift.com:3000/"
+const api_url = "http://admin.thehandsgift.com:3000/"
 // const api_url = "http://127.0.0.1:3000/"
 
 export default new Vuex.Store({
@@ -23,7 +23,11 @@ export default new Vuex.Store({
       content: '',
     },
     progress: false,
-    alba2_login: false,
+    alba2_login: {
+      login: false,
+      id: '',
+      pw: ''
+    },
   },
 
   getters: {
@@ -62,7 +66,6 @@ export default new Vuex.Store({
           state.p_length = parseInt(length / 10)
         }
       }
-      console.log(l_product)
     },
     product: (state, product) => {
       state.product = product
@@ -122,6 +125,34 @@ export default new Vuex.Store({
         })
         .then((res) => {
           resolve(res.data)
+        })
+      })
+    },
+    a_login: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'post',
+          params: params,
+          url: api_url + 'user/a_login',
+          responseType: 'json'
+        })
+        .then((res) => {
+          let msg = ''
+          if (res.data[0].confirm != 0) {
+            context.commit('alba2_login', {
+              login: true,
+              id: params.id,
+              pwd: params.pwd
+            })
+            msg = '로그인 성공'
+          }
+          else {
+            msg = '로그인 실패'
+          }
+
+          resolve(msg)
+
+          
         })
       })
     },
