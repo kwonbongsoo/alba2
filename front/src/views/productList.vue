@@ -12,7 +12,7 @@
       <div v-if="product.sold_yn == 'Y'" @click="productDetail(product)" class="sold_out">
         <span>준비중</span>
       </div>
-        <v-btn icon class="mr-0 float_right" @click="d_product(product.no, product.img_name)">
+        <v-btn icon class="mr-0 float_right" @click="cancel_dialog(product.no, product.img_name)">
           <v-icon class="red_icon">clear</v-icon>
         </v-btn>
         <v-img @click="productDetail(product)"
@@ -25,7 +25,7 @@
             <span class="headline">{{product.name}}</span>
             <div class="d-flex">
               <div class="ml-2 text--darken-2">
-                <span class="headline">{{product.price}}원</span>
+                <span class="headline">{{formatPrice(product.price)}}원</span>
               </div>
             </div>
           </div>
@@ -39,19 +39,23 @@
         v-model="page"
         :length="leng"
         @input="list_req"
+        color="info"
       ></v-pagination>
     </v-footer>
+    <modal v-if="dialog.dialog" @d_product="d_product"/>
   </div>
 </template>
 
 <script>
+import modal from '../components/modal'
   export default {
+    components: {
+      modal
+    },
     data: () => ({
-      reviews: 413,
-      value: 4.5,
       page: 1,
       leng: 0,
-      val: 0,
+      d_product_data: ''
     }),
     computed: {
       l_product() {
@@ -59,6 +63,9 @@
       },
       p_length() {
         return this.$store.getters.p_length
+      },
+      dialog() {
+        return this.$store.getters.dialog;
       }
     },
     mounted() {
@@ -84,14 +91,25 @@
           console.log(res)
         })
       },
-      d_product(no, img_name) {
-        let params = {
+      cancel_dialog(no, img_name) {
+        this.d_product_data = {
           no: no,
-          original_name : img_name
+          original_name: img_name
         }
-        this.$store.dispatch('d_product', params)
+        this.$store.commit('dialog', {
+          dialog: true,
+          title: '상품 삭제',
+          content: '정말 이 상품을 삭제 하시겠습니까?'
+        })
+      },
+      d_product() {
+        this.$store.dispatch('d_product', this.d_product_data)
         .then((res) => {
           console.log(res)
+          this.d_product_data =  ''
+          this.$store.commit('dialog', {
+            dialog: false
+          })
           this.$store.dispatch('l_product', {
             page: (this.page-1)*10
           })
@@ -99,7 +117,10 @@
             this.leng = parseInt(this.p_length)
           })
         })
-      }
+      },
+      formatPrice(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      },
     }
   }
 </script>

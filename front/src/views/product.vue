@@ -5,6 +5,7 @@
         v-model="name"
         :error-messages="nameErrors"
         :counter="10"
+        color="info"
         label="상품 이름"
         required
         @input="$v.name.$touch()"
@@ -14,6 +15,7 @@
         v-model="desc"
         :error-messages="descErrors"
         :counter="20"
+        color="info"
         label="상품 설명"
         required
         @input="$v.desc.$touch()"
@@ -23,6 +25,7 @@
         v-model="price"
         :error-messages="priceErrors"
         :counter="10"
+        color="info"
         label="가격"
         type="number"
         required
@@ -40,7 +43,9 @@
             <v-flex xs4 sm4 md3>
               <v-text-field
                v-model="option_name"
-                label="옵션 이름"
+               color="info"
+               label="옵션 이름"
+               maxlength="10"
               ></v-text-field>
             </v-flex>
 
@@ -48,6 +53,7 @@
               <v-text-field
                 v-model="option_price"
                 type="number"
+                color="info"
                 label="옵션 가격"
               ></v-text-field>
             </v-flex>
@@ -69,12 +75,12 @@
         v-for="(item, index) in l_option"
         :key="item.name"
         >
-          <v-list-tile @click="optionClick(item, index)" :class= "{activeBack : activeTab == item.option_no }">
-            <v-list-tile-content class="left">
+          <v-list-tile :class= "{activeBack : activeTab == item.option_no }">
+            <v-list-tile-content @click="optionClick(item, index)" class="left">
               <v-list-tile-title>{{ item.name }}</v-list-tile-title>
             </v-list-tile-content>
-            <v-list-tile-content class="right">
-              <v-list-tile-title>{{ item.price }}원</v-list-tile-title>
+            <v-list-tile-content @click="optionClick(item, index)" class="right">
+              <v-list-tile-title>{{ formatPrice(item.price) }}원</v-list-tile-title>
             </v-list-tile-content>
             <span class="right margin_left" @click="d_option(item.option_no)">
               <v-icon>clear</v-icon>
@@ -89,7 +95,7 @@
             <img :src="imageUrl" height="150" v-if="imageUrl"/>
             <v-icon @click="clearImg" v-if="imageUrl" class="clear_icon">clear</v-icon>
           </div>
-					<v-text-field label="이미지 업로드" @click='pickFile' v-model='imageName' prepend-icon='attach_file'></v-text-field>
+					<v-text-field label="이미지 업로드" color="info" @click='pickFile' v-model='imageName' prepend-icon='attach_file'></v-text-field>
 					<input
 						type="file"
 						style="display: none"
@@ -163,9 +169,6 @@
         !this.$v.price.maxLength && errors.push('상품 가격이 너무 깁니다')
         !this.$v.price.required && errors.push('상품 가격을 입력하세요')
         return errors
-      },
-      option_dialog () {
-        return this.$store.getters.option_dialog;
       },
       product () {
         return this.$store.getters.product;
@@ -297,7 +300,10 @@
       add_modify_option() {
         if (this.l_o_idx != -1) {
           this.l_option[this.l_o_idx].name = this.option_name
-          this.l_option[this.l_o_idx].price = this.option_price
+          if (parseInt(this.option_price) <= 1000000)
+            this.l_option[this.l_o_idx].price = this.option_price
+          else 
+            this.l_option[this.l_o_idx].price = 1000000
         }
         else if (this.option_name == '' || this.option_price == '') {
           return
@@ -313,9 +319,14 @@
             }
           }
           if (dup) {
+            let o_p
+            if (parseInt(this.option_price) <= 1000000)
+              o_p = this.option_price
+          else 
+              o_p = 1000000
             this.l_option.push({
               name: this.option_name,
-              price: this.option_price
+              price: o_p
             })
             this.option_name = ''
             this.option_price = ''
@@ -346,7 +357,11 @@
           this.option_price = ''
           this.l_o_idx = -1
         }
-      }
+      },
+      formatPrice(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      },
+
     }
   }
 </script>

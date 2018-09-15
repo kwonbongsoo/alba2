@@ -42,14 +42,10 @@
 </template>
 
 <script>
-import optionModal from '../components/optionModal'
+
 export default {
   name: 'App',    
   
-  components: {
-    optionModal
-  },
-
   data () {
     return {
       drawer: false,
@@ -64,7 +60,8 @@ export default {
     },
     progress() {
       return this.$store.getters.progress;
-    }
+    },
+
   },
   methods: {
     productListGo() {

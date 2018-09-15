@@ -17,7 +17,11 @@ export default new Vuex.Store({
     product: '',
     p_length: 1,
     add_product_btn: false,
-    option_dialog: false,
+    dialog: {
+      dialog: false,
+      title: '',
+      content: '',
+    },
     progress: false,
   },
 
@@ -34,8 +38,8 @@ export default new Vuex.Store({
     add_product_btn: function(state) {
       return state.add_product_btn
     },
-    option_dialog: function(state) {
-      return state.option_dialog
+    dialog: function(state) {
+      return state.dialog
     },
     progress: function(state) {
       return state.progress
@@ -62,8 +66,8 @@ export default new Vuex.Store({
     add_product_btn: (state, add_product_btn) => {
       state.add_product_btn = add_product_btn
     },
-    option_dialog: (state, option_dialog) => {
-      state.option_dialog = option_dialog
+    dialog: (state, dialog) => {
+      state.dialog = dialog
     },
     progress: (state, progress) => {
       state.progress = progress
