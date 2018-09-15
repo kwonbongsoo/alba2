@@ -23,6 +23,7 @@ export default new Vuex.Store({
       content: '',
     },
     progress: false,
+    alba2_login: false,
   },
 
   getters: {
@@ -43,6 +44,9 @@ export default new Vuex.Store({
     },
     progress: function(state) {
       return state.progress
+    },
+    alba2_login: function(state) {
+      return state.alba2_login
     }
   },
 
@@ -71,6 +75,9 @@ export default new Vuex.Store({
     },
     progress: (state, progress) => {
       state.progress = progress
+    },
+    alba2_login: (state, alba2_login) => {
+      state.alba2_login = alba2_login
     },
       
   },
