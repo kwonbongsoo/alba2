@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import productList from './views/productList.vue'
 import login from './views/login.vue'
+import pwdChange from './views/pwdChange.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -35,6 +36,14 @@ const router =  new Router({
       meta: {
         auth: true
       }
+    },
+    {
+      path: '/pwdChange',
+      name: 'pwdChange',
+      component: pwdChange,
+      meta: {
+        auth : store.getters.alba2_login.login
+      }
     }
   ]
 })
@@ -44,7 +53,10 @@ router.beforeEach((to, from, next) => {
     return routerInfo.meta.auth;
   }))
   {
-    next('/login')
+    if (store.getters.alba2_login.login)
+      next()
+    else
+      next('/login')
   }
   else {
     next()
