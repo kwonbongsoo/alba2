@@ -7,7 +7,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 
 Vue.use(Vuex)
-const api_url = "http://admin.thehandsgift.com:3000/"
+const api_url = "https://thehandsgift.com:3000/"
 // const api_url = "http://127.0.0.1:3000/"
 
 export default new Vuex.Store({
