@@ -14,7 +14,7 @@ const router =  new Router({
       name: 'productList',
       component: productList,
       meta: {
-        alba2_login: store.getters.alba2_login
+        auth: store.getters.alba2_login
       }
     },
     {
@@ -40,7 +40,6 @@ const router =  new Router({
 })
 
 router.beforeEach((to, from, next) => {
-
   if(!to.matched.some((routerInfo) => {
     return routerInfo.meta.auth;
   }))

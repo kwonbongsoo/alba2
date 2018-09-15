@@ -47,7 +47,8 @@
       
     },
     mounted() {
-
+        this.$store.commit('alba2_login', true)
+        this.$store.commit('add_product_btn', false)
     },
     methods: {
       
