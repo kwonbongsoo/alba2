@@ -24,7 +24,35 @@
             type="password"
             required
             ></v-text-field>
-            <v-btn @click="pwdChange">변경하기</v-btn>
+            <v-btn @click="pwdChange">비밀번호 변경</v-btn>
+        </v-form>
+
+
+        <v-form>
+            <v-text-field
+            v-model="bank_name"
+            :maxlength="20"
+            color="info"
+            label="은행명"
+            required
+            ></v-text-field>
+            <v-text-field
+            v-model="bank_no"
+            :maxlength="20"
+            color="info"
+            label="계좌번호"
+            required
+            type="number"
+            ></v-text-field>
+            <!-- <v-text-field
+            v-model="pwd_confirm"
+            :maxlength="20"
+            color="info"
+            label="새 비밀번호 확인"
+            type="password"
+            required
+            ></v-text-field> -->
+            <v-btn @click="infoChange">정보 변경</v-btn>
         </v-form>
     </div>
 </template>
@@ -35,7 +63,9 @@
     data: () => ({
       id: '',
       pwd: '',
-      pwd_confirm: ''
+      pwd_confirm: '',
+      bank_name: '',
+      bank_no: ''
     }),
     computed: {
         alba2_login() {
@@ -43,6 +73,7 @@
         }
     },
     mounted() {
+        this.$store.commit('add_product_btn', false)
         this.id = this.alba2_login.id
     },
     methods: {
@@ -58,6 +89,9 @@
                 console.log(params)
                 alert('서버 db 구현해야됨')
             }
+        },
+        infoChange() {
+            console.log('info')
         }
     }
   }

@@ -23,7 +23,7 @@
             <v-icon>vpn_key</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>계정 비밀번호 변경</v-list-tile-title>
+            <v-list-tile-title>마스터 정보</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-list-tile v-if="alba2_login.login" @click="logout">
@@ -98,7 +98,7 @@ export default {
       this.$router.push('/login')
     },
     pwdChange() {
-      this.$router.push('/pwdChange')
+      this.$router.push('/masterInfo')
     }
   }
 }
