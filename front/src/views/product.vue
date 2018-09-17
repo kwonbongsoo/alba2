@@ -75,7 +75,7 @@
         v-for="(item, index) in l_option"
         :key="item.name"
         >
-          <v-list-tile :class= "{activeBack : activeTab == item.option_no }">
+          <v-list-tile :class= "{activeBack : activeTab == item.name   }">
             <v-list-tile-content @click="optionClick(item, index)" class="left">
               <v-list-tile-title>{{ item.name }}</v-list-tile-title>
             </v-list-tile-content>
@@ -352,8 +352,8 @@
           this.l_option.splice(d_index, 1)
       },
       optionClick(item, index) {
-        if(item.option_no != this.activeTab) {
-          this.activeTab = item.option_no
+        if(item.name != this.activeTab) {
+          this.activeTab = item.name
           this.option_name = item.name
           this.option_price = item.price
           this.l_o_idx = index
