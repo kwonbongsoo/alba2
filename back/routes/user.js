@@ -68,10 +68,20 @@ router.post('/add', function(req, res, next) {
 
 
 
-  let params = {
+  // let params = {
 
-  }
+  // }
 
+});
+
+
+router.get('/auth', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  res.json('1')
 });
 
 module.exports = router;
