@@ -19,6 +19,7 @@ const sharp = require('sharp');
 
 /* GET users listing. */
 router.get('/l_product', function(req, res, next) {
+  //앱애서도 사용함
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
   res.setHeader("Access-Control-Max-Age", "3600")
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
