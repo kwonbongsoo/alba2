@@ -197,7 +197,7 @@ function product_update(params) {
 
   let deleteObj = new aws.S3();
   deleteObj.deleteObject(delete_params, (err, data) => {
-    productDB.update(params.no, params.name, params.price, params.desc, params.sold_yn, params.o_name, params.o_price, params.imageName, params.img_path, (result) => {
+    productDB.update(parseInt(params.no), params.name, params.price, params.desc, params.sold_yn, params.o_name, params.o_price, params.imageName, params.img_path, (result) => {
       console.log(result)
       params.res.json(result)
     }, (error) => {

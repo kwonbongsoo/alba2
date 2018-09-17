@@ -2,7 +2,6 @@
   <div class="">
     <v-layout row justify-center>
       <v-dialog v-model="dialog_v" persistent max-width="290">
-        <v-btn slot="activator" color="primary" dark>Open Dialog</v-btn>
         <v-card>
           <v-card-title class="headline">{{dialog.title}}</v-card-title>
           <v-card-text>{{dialog.content}}</v-card-text>

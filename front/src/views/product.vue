@@ -298,14 +298,7 @@
         
       },
       add_modify_option() {
-        if (this.l_o_idx != -1) {
-          this.l_option[this.l_o_idx].name = this.option_name
-          if (parseInt(this.option_price) <= 1000000)
-            this.l_option[this.l_o_idx].price = this.option_price
-          else 
-            this.l_option[this.l_o_idx].price = 1000000
-        }
-        else if (this.option_name == '' || this.option_price == '') {
+        if (this.option_name == '' || this.option_price == '') {
           return
         }
         else {
@@ -319,18 +312,32 @@
             }
           }
           if (dup) {
-            let o_p
-            if (parseInt(this.option_price) <= 1000000)
-              o_p = this.option_price
-          else 
-              o_p = 1000000
-            this.l_option.push({
-              name: this.option_name,
-              price: o_p
-            })
-            this.option_name = ''
-            this.option_price = ''
+            if(this.l_o_idx == -1) {
+              let o_p
+              if (parseInt(this.option_price) <= 1000000)
+                  o_p = this.option_price
+              else 
+                o_p = 1000000
+              this.l_option.push({
+                name: this.option_name,
+                price: o_p
+              })
+            }
+            else {
+              this.l_option[this.l_o_idx].name = this.option_name
+              if (parseInt(this.option_price) <= 1000000)
+                this.l_option[this.l_o_idx].price = this.option_price
+              else 
+                this.l_option[this.l_o_idx].price = 1000000
+            }
           }
+          else {
+            alert('옵션 이름이 중복되어 변경 및 추가 할수 없습니다.')
+          }
+          this.option_name = ''
+          this.option_price = ''
+          this.l_o_idx = -1;
+          this.activeTab = ''
         }
       },
       d_option(no) {
