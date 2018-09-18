@@ -7,8 +7,8 @@ import createPersistedState from 'vuex-persistedstate'
 
 
 Vue.use(Vuex)
-const api_url = "https://thehandsgift.com:3000/"
-// const api_url = "http://127.0.0.1:3000/"
+// const api_url = "https://thehandsgift.com:3000/"
+const api_url = "http://127.0.0.1:3000/"
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
@@ -26,7 +26,8 @@ export default new Vuex.Store({
     alba2_login: {
       login: false,
       id: '',
-      pw: ''
+      pw: '',
+      no: ''
     },
   },
 
@@ -142,19 +143,82 @@ export default new Vuex.Store({
             context.commit('alba2_login', {
               login: true,
               id: params.id,
-              pwd: params.pwd
+              pwd: params.pwd,
+              no: res.data[0].no
             })
+            console.log(res.data[0].no)
             msg = '로그인 성공'
           }
           else {
+            context.commit('alba2_login', {
+              login: false,
+              id: '',
+              pwd: '',
+              no: ''
+            })
             msg = '로그인 실패'
           }
-
           resolve(msg)
-
-          
         })
       })
     },
+
+    info_update: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'post',
+          params: params,
+          url: api_url + 'user/info_update',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.statusText)
+        })
+      })
+    },
+
+    user_info: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'user/user_info',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.data)
+        })
+      })
+    },
+
+    pwd_update: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'post',
+          params: params,
+          url: api_url + 'user/pwd_update',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.statusText)
+        })
+      })
+    },
+
+    email_test: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'post',
+          params: params,
+          url: api_url + 'user/add',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res)
+        })
+      })
+    },
+    
+
   }
 })

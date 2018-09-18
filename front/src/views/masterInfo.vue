@@ -53,6 +53,7 @@
             required
             ></v-text-field> -->
             <v-btn @click="infoChange">정보 변경</v-btn>
+            <!-- <v-btn @click="test">테스트</v-btn> -->
         </v-form>
     </div>
 </template>
@@ -75,23 +76,86 @@
     mounted() {
         this.$store.commit('add_product_btn', false)
         this.id = this.alba2_login.id
+
+        this.$store.dispatch('user_info', {
+            no: this.alba2_login.no,
+            id: this.id
+        })
+        .then((res) => {
+            console.log(res)
+            this.bank_name = res[0].bank_name
+            this.bank_no = res[0].bank_no
+        })
     },
     methods: {
         pwdChange() {
-            if (this.pwd != this.pwd_confirm) {
+            if (this.pwd == '' || this.pwd_confirm == '') {
+                alert('비밀번호를 입력해주세요')
+            }
+            else if (this.pwd.length < 8 || this.pwd_confirm.length < 8) {
+                alert('비밀번호는 8자리 이상 입력해주세요')
+            }
+            else if (this.pwd != this.pwd_confirm) {
                 alert('비밀 번호가 서로 일치하지 않습니다.')
             }
             else {
                 let params = {
                     id: this.id,
-                    pwd: this.pwd
+                    pwd: this.pwd,
+                    no: this.alba2_login.no
                 }
-                console.log(params)
-                alert('서버 db 구현해야됨')
+
+                this.$store.dispatch('pwd_update', params)
+                .then((res) => {
+                    if(res == 'OK') {
+                        alert('업데이트 되었습니다.')
+                        this.pwd = ''
+                        this.pwd_confirm = ''
+                    }
+                    else {
+                        alert('업데이트를 재시도 해주세요')
+                        this.pwd = ''
+                        this.pwd_confirm = ''
+                    }
+                })
             }
         },
         infoChange() {
-            console.log('info')
+            // if (this.id == '') {
+            //     alert('아이디를 입력하세요')
+            // }
+            if (this.bank_name == '') {
+                alert('은행명을 입력하세요')
+            }
+            else if (this.bank_no == '') {
+                alert('계좌번호를 입력해주세요')
+            }
+            else {
+                let params = {
+                    bank_name: this.bank_name,
+                    bank_no: this.bank_no,
+                    id: this.id,
+                    no: this.alba2_login.no
+                }
+                this.$store.dispatch('info_update', params)
+                .then((res) => {
+                    if(res == 'OK') {
+                        alert('업데이트 되었습니다.')
+                    }
+                    else {
+                        alert('업데이트를 재시도 해주세요')
+                    }
+                })
+            }
+            
+        },
+        test() {
+            this.$store.dispatch('email_test', {
+                email: 'star12310@naver.com'
+            })
+            .then((res) => {
+                console.log(res)
+            })
         }
     }
   }

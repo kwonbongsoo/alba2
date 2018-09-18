@@ -39,7 +39,7 @@ router.post('/add', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
   res.setHeader("Access-Control-Allow-Origin", "*")
   
-  let email = req.body.email;
+  let email = req.query.email;
  
   let transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -47,12 +47,12 @@ router.post('/add', function(req, res, next) {
   });
 
   let mailOptions = {
-    from: 'youremail@gmail.com',    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
+    from: 'start1231076@gmail.com',    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
     to: email ,                     // 수신 메일 주소
     subject: '안녕하세요, 자연과 사랑입니다. 이메일 인증을 해주세요.',   // 제목
     // text: 'That was easy!'  // 내용
     html: '<p>아래의 링크를 클릭해주세요 !</p>' +
-          "<a href='https://thehandsgift:3000/user/auth/?email="+ email +"&token=abcdefg'>인증하기</a>" 
+          "<a href='https://thehandsgift.com:3000/user/auth/?email="+ email +"&token=abcdefg'>인증하기</a>" 
   };
 
 
@@ -83,5 +83,68 @@ router.get('/auth', function(req, res, next) {
 
   res.json('1')
 });
+
+router.get('/user_info', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    no: parseInt(req.query.no),
+    id: req.query.id
+  }
+  
+  console.log(params)
+  userDB.user_info(params, (result) => {
+    res.json(result)
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end('error')
+  })
+});
+
+
+router.post('/info_update', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    no: parseInt(req.query.no),
+    id: req.query.id,
+    bank_name: req.query.bank_name,
+    bank_no: req.query.bank_no
+  }
+  userDB.info_update(params, (result) => {
+    res.json(result)
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end('error')
+  })
+});
+
+router.post('/pwd_update', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    no: parseInt(req.query.no),
+    id: req.query.id,
+    pwd: req.query.pwd,
+  }
+  userDB.pwd_update(params, (result) => {
+    res.json(result)
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end('error')
+  })
+})
 
 module.exports = router;
