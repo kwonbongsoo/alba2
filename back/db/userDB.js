@@ -60,6 +60,20 @@ module.exports = {
         }
       })
   },
+
+  email_auth_confirm(params, successFn, errorFn) {
+    this.connection.query(
+        'CALL email_auth_confirm(?, ?)',
+        [ params.email, params.confirm_no ],
+      function (error, result) {
+        if (error) {
+          console.log(error)
+          errorFn(error)
+        } else {
+          successFn(result[0])
+        }
+      })
+  },
   
 
   
