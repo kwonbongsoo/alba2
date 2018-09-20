@@ -48,7 +48,7 @@ router.post('/a_login', function(req, res, next) {
 });
 
 
-router.get('/add', function(req, res, next) {
+router.post('/email_auth_confirm', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
   res.setHeader("Access-Control-Max-Age", "3600")
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
