@@ -148,14 +148,6 @@
                 })
             }
             
-        },
-        test() {
-            this.$store.dispatch('email_test', {
-                email: 'star12310@naver.com'
-            })
-            .then((res) => {
-                console.log(res)
-            })
         }
     }
   }

@@ -203,21 +203,7 @@ export default new Vuex.Store({
           resolve(res.statusText)
         })
       })
-    },
-
-    email_test: (context, params) => {
-      return new Promise((resolve, reject) => {
-        axios({
-          method: 'post',
-          params: params,
-          url: api_url + 'user/add',
-          responseType: 'json'
-        })
-        .then((res) => {
-          resolve(res)
-        })
-      })
-    },
+    }
     
 
   }
