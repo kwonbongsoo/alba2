@@ -89,8 +89,8 @@ router.post('/email_auth_confirm', function(req, res, next) {
       }
     });
 
-    console.log(result)
-    res.json(result)
+    result[0].confirm_no = params.confirm_no
+    res.json(result[0])
   }, (error) => {
     res.status(200)
             .set('Content-Type', 'text/plain;charset=UTF-8')
