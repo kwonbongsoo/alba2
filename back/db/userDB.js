@@ -63,8 +63,8 @@ module.exports = {
 
   email_auth_confirm(params, successFn, errorFn) {
     this.connection.query(
-        'CALL email_auth_confirm(?, ?)',
-        [ params.email, params.confirm_no ],
+        'CALL email_auth_confirm(?)',
+        [ params.email ],
       function (error, result) {
         if (error) {
           console.log(error)
@@ -74,6 +74,22 @@ module.exports = {
         }
       })
   },
+
+  u_add(params, successFn, errorFn) {
+    this.connection.query(
+        'CALL u_add(?, ?, ?)',
+        [ params.email, params.pwd, params.token ],
+      function (error, result) {
+        if (error) {
+          console.log(error)
+          errorFn(error)
+        } else {
+          successFn(result[0])
+        }
+      })
+  },
+
+  
   
 
   

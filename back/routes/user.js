@@ -41,7 +41,7 @@ router.post('/a_login', function(req, res, next) {
   }, (error) => {
     res.status(200)
             .set('Content-Type', 'text/plain;charset=UTF-8')
-            .end('error')
+            .end(error)
   })
 
   
@@ -60,41 +60,41 @@ router.post('/email_auth_confirm', function(req, res, next) {
     confirm_no: confirm_no
   }
 
-  console.log(params)
-
   userDB.email_auth_confirm(params, (result) => {
-    let email = params.email;
+    if (result[0].result === 'SEND') {
+      let email = params.email;
  
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: mailData
-    });
-  
-    let mailOptions = {
-      from: 'start1231076@gmail.com',    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
-      to: email ,                     // 수신 메일 주소
-      subject: '안녕하세요, 자연과 사랑입니다. 이메일 인증을 해주세요.',   // 제목
-      // text: 'That was easy!'  // 내용
-      html: '<p>아래의 번호를 입력해주세요!</p>' +
-            "<p>"+params.confirm_no+"</p>" 
-    };
-  
-  
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-          console.log(error);
-      }
-      else {
-          console.log('Email sent: ' + info.response);
-      }
-    });
+      let transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: mailData
+      });
+    
+      let mailOptions = {
+        from: 'start1231076@gmail.com',    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
+        to: email ,                     // 수신 메일 주소
+        subject: '안녕하세요, 자연과 사랑입니다. 이메일 인증을 해주세요.',   // 제목
+        // text: 'That was easy!'  // 내용
+        html: '<p>아래의 번호를 입력해주세요!</p>' +
+              "<p>"+params.confirm_no+"</p>" 
+      };
+    
+    
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        }
+        else {
+            console.log('Email sent: ' + info.response);
+        }
+      });
 
-    result[0].confirm_no = params.confirm_no
+      result[0].confirm_no = params.confirm_no
+    }
     res.json(result[0])
   }, (error) => {
     res.status(200)
             .set('Content-Type', 'text/plain;charset=UTF-8')
-            .end('error')
+            .end(error)
   })
 
 });
@@ -120,13 +120,12 @@ router.get('/user_info', function(req, res, next) {
     id: req.query.id
   }
   
-  console.log(params)
   userDB.user_info(params, (result) => {
     res.json(result)
   }, (error) => {
     res.status(200)
             .set('Content-Type', 'text/plain;charset=UTF-8')
-            .end('error')
+            .end(error)
   })
 });
 
@@ -148,7 +147,7 @@ router.post('/info_update', function(req, res, next) {
   }, (error) => {
     res.status(200)
             .set('Content-Type', 'text/plain;charset=UTF-8')
-            .end('error')
+            .end(error)
   })
 });
 
@@ -168,8 +167,31 @@ router.post('/pwd_update', function(req, res, next) {
   }, (error) => {
     res.status(200)
             .set('Content-Type', 'text/plain;charset=UTF-8')
-            .end('error')
+            .end(error)
   })
 })
+
+router.get('/u_add', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  
+  let params = {
+    email: req.query.email,
+    pwd: req.query.pwd,
+    token: req.query.token
+  }
+
+  console.log(params)
+
+  userDB.u_add(params, (result) => {
+    res.json(result)
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
 
 module.exports = router;
