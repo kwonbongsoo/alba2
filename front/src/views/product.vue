@@ -202,6 +202,13 @@
         this.l_option = []
         this.o_name = ''
         this.o_price = ''
+        this.l_o_idx = -1
+        this.activeTab = ''
+        this.option_price = ''
+        this.option_name = ''
+        this.optionSubmit = ''
+        this.sold_yn = ''
+        this.inputFileValue = ''
 
       },
       pickFile () {
