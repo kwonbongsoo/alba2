@@ -5,10 +5,10 @@ module.exports = {
     this.connection = conn // 변수를 알아서 만들어준다.
   },
 
-  l_product(page, successFn, errorFn) {
+  l_product(params, successFn, errorFn) {
     this.connection.query(
-        'CALL l_product(?)',
-        [page],
+        'CALL l_product(?, ?)',
+        [params.page, params.store_no],
       function (error, result) {
         if (error) {
           console.log(error)
@@ -18,10 +18,10 @@ module.exports = {
         }
       })
   },
-  add(name, price, desc, sold_yn, o_name, o_price, imageName, img_path, successFn, errorFn) {
+  add(params, successFn, errorFn) {
     this.connection.query(
-      'CALL add_product(?, ?, ?, ?, ?, ?, ?, ?)',
-      [name, price, desc, sold_yn, o_name, o_price, imageName, img_path],
+      'CALL add_product(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [params.name, params.price, params.desc, params.sold_yn, params.o_name, params.o_price, params.imageName, params.img_path, parseInt(params.store_no)],
       function (error, result) {
         console.log(error)
         if (error) {
@@ -31,10 +31,10 @@ module.exports = {
         }
       })
   },
-  update(no ,name, price, desc, sold_yn, o_name, o_price, imageName, img_path, successFn, errorFn) {
+  update(params, successFn, errorFn) {
     this.connection.query(
-      'CALL update_product(?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [no, name, price, desc, sold_yn, o_name, o_price, imageName, img_path],
+      'CALL update_product(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [params.no, params.name, params.price, params.desc, params.sold_yn, params.o_name, params.o_price, params.imageName, params.img_path, parseInt(params.store_no)],
       function (error, result) {
         console.log(error)
         if (error) {

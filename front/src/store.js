@@ -7,8 +7,8 @@ import createPersistedState from 'vuex-persistedstate'
 
 
 Vue.use(Vuex)
-const api_url = "https://thehandsgift.com:3000/"
-// const api_url = "http://127.0.0.1:3000/"
+// const api_url = "https://thehandsgift.com:3000/"
+const api_url = "http://127.0.0.1:3000/"
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
@@ -139,6 +139,7 @@ export default new Vuex.Store({
         })
         .then((res) => {
           let msg = ''
+          console.log(res)
           if (res.data[0].confirm != 0) {
             context.commit('alba2_login', {
               login: true,
@@ -163,12 +164,12 @@ export default new Vuex.Store({
       })
     },
 
-    info_update: (context, params) => {
+    store_update: (context, params) => {
       return new Promise((resolve, reject) => {
         axios({
           method: 'post',
           params: params,
-          url: api_url + 'user/info_update',
+          url: api_url + 'user/store_update',
           responseType: 'json'
         })
         .then((res) => {
@@ -177,12 +178,12 @@ export default new Vuex.Store({
       })
     },
 
-    user_info: (context, params) => {
+    store_info: (context, params) => {
       return new Promise((resolve, reject) => {
         axios({
           method: 'get',
           params: params,
-          url: api_url + 'user/user_info',
+          url: api_url + 'user/store_info',
           responseType: 'json'
         })
         .then((res) => {
@@ -191,12 +192,12 @@ export default new Vuex.Store({
       })
     },
 
-    pwd_update: (context, params) => {
+    a_pwd_update: (context, params) => {
       return new Promise((resolve, reject) => {
         axios({
           method: 'post',
           params: params,
-          url: api_url + 'user/pwd_update',
+          url: api_url + 'user/a_pwd_update',
           responseType: 'json'
         })
         .then((res) => {

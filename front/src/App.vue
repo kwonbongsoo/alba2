@@ -26,6 +26,17 @@
             <v-list-tile-title>마스터 정보</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile v-if="alba2_login.login" @click="pwdChange">
+          <v-list-tile-action>
+            <v-icon>add_comment</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-badge right dark>
+              <span slot="badge">2</span>
+              <span>가입 승인</span>
+            </v-badge>
+          </v-list-tile-content>
+        </v-list-tile>
         <v-list-tile v-if="alba2_login.login" @click="logout">
           <v-list-tile-action>
             <v-icon>subdirectory_arrow_right</v-icon>
@@ -131,6 +142,10 @@ export default {
 }
 .high_sky_plus {
   z-index: 12;
+}
+.v-badge__badge {
+  top: 0!important;
+  right: 30px!important;
 }
 
 </style>

@@ -66,13 +66,17 @@ import modal from '../components/modal'
       },
       dialog() {
         return this.$store.getters.dialog;
-      }
+      },
+      alba2_login() {
+        return this.$store.getters.alba2_login
+      },
     },
     mounted() {
       this.$store.commit('product', '')
       this.$store.commit('add_product_btn', true)
       this.$store.dispatch('l_product', {
-        page: (this.page-1)*10
+        page: (this.page-1)*10,
+        store_no: this.alba2_login.no
       })
       .then(() => {
         this.leng = parseInt(this.p_length)
@@ -85,7 +89,8 @@ import modal from '../components/modal'
       },
       list_req() {
         this.$store.dispatch('l_product', {
-          page: (this.page-1)*10
+          page: (this.page-1)*10,
+          store_no: this.alba2_login.no
         })
         .then((res) => {
           console.log(res)
@@ -111,7 +116,8 @@ import modal from '../components/modal'
             dialog: false
           })
           this.$store.dispatch('l_product', {
-            page: (this.page-1)*10
+            page: (this.page-1)*10,
+            store_no: this.alba2_login.no
           })
           .then(() => {
             this.leng = parseInt(this.p_length)

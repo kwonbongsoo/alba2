@@ -109,7 +109,7 @@ router.get('/auth', function(req, res, next) {
   res.json('1')
 });
 
-router.get('/user_info', function(req, res, next) {
+router.get('/store_info', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
   res.setHeader("Access-Control-Max-Age", "3600")
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
@@ -120,7 +120,7 @@ router.get('/user_info', function(req, res, next) {
     id: req.query.id
   }
   
-  userDB.user_info(params, (result) => {
+  userDB.store_info(params, (result) => {
     res.json(result)
   }, (error) => {
     res.status(200)
@@ -130,7 +130,7 @@ router.get('/user_info', function(req, res, next) {
 });
 
 
-router.post('/info_update', function(req, res, next) {
+router.post('/store_update', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
   res.setHeader("Access-Control-Max-Age", "3600")
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
@@ -142,7 +142,7 @@ router.post('/info_update', function(req, res, next) {
     bank_name: req.query.bank_name,
     bank_no: req.query.bank_no
   }
-  userDB.info_update(params, (result) => {
+  userDB.store_update(params, (result) => {
     res.json(result)
   }, (error) => {
     res.status(200)
@@ -151,7 +151,7 @@ router.post('/info_update', function(req, res, next) {
   })
 });
 
-router.post('/pwd_update', function(req, res, next) {
+router.post('/a_pwd_update', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
   res.setHeader("Access-Control-Max-Age", "3600")
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
@@ -162,7 +162,7 @@ router.post('/pwd_update', function(req, res, next) {
     id: req.query.id,
     pwd: req.query.pwd,
   }
-  userDB.pwd_update(params, (result) => {
+  userDB.a_pwd_update(params, (result) => {
     res.json(result)
   }, (error) => {
     res.status(200)
@@ -180,7 +180,8 @@ router.get('/u_add', function(req, res, next) {
   let params = {
     email: req.query.email,
     pwd: req.query.pwd,
-    token: req.query.token
+    token: req.query.token,
+    alias: req.query.alias
   }
 
   console.log(params)

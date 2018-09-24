@@ -25,8 +25,12 @@ router.get('/l_product', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
   res.setHeader("Access-Control-Allow-Origin", "*")
   // res.send('respond with a resource');
-  let page = req.query.page;
-  productDB.l_product(page, (result) => {
+
+  let params = {
+    page: req.query.page,
+    store_no: req.query.store_no
+  }
+  productDB.l_product(params, (result) => {
     let arr = []
     let tmp, option_names, option_prices, option_no, option_arr = []
     for (let i = 0; i < result.length;  i++) {
@@ -109,6 +113,7 @@ function(req, res, next) {
           o_name : req.body.o_name,
           o_price : req.body.o_price,
           original_name : req.body.original_name,
+          store_no : req.body.store_no,
           req : req,
           res : res
         }
@@ -134,10 +139,11 @@ function(req, res, next) {
       o_name : req.body.o_name,
       o_price : req.body.o_price,
       original_name : req.body.original_name,
+      store_no : req.body.store_no,
       req : req,
       res : res
     }
-    productDB.update(params.no, params.name, params.price, params.desc, params.sold_yn, params.o_name, params.o_price, params.imageName, params.img_path, (result) => {
+    productDB.update(params, (result) => {
       console.log(result)
       params.res.json(result)
     }, (error) => {
@@ -178,7 +184,7 @@ router.get('/d_product', function(req, res, next) {
 
 
 function product_add(params) {
-  productDB.add(params.name, params.price, params.desc, params.sold_yn, params.o_name, params.o_price, params.imageName, params.img_path, (result) => {
+  productDB.add(params, (result) => {
     console.log(result)
     params.res.json(result)
   }, (error) => {
@@ -198,7 +204,7 @@ function product_update(params) {
 
   let deleteObj = new aws.S3();
   deleteObj.deleteObject(delete_params, (err, data) => {
-    productDB.update(parseInt(params.no), params.name, params.price, params.desc, params.sold_yn, params.o_name, params.o_price, params.imageName, params.img_path, (result) => {
+    productDB.update(params, (result) => {
       console.log(result)
       params.res.json(result)
     }, (error) => {

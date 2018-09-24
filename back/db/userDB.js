@@ -18,9 +18,9 @@ module.exports = {
         }
       })
   },
-  info_update(params, successFn, errorFn) {
+  store_update(params, successFn, errorFn) {
     this.connection.query(
-        'CALL info_update(?, ?, ?, ?)',
+        'CALL store_update(?, ?, ?, ?)',
         [ params.no, params.bank_name, params.bank_no, params.id ],
       function (error, result) {
         if (error) {
@@ -32,9 +32,9 @@ module.exports = {
       })
   },
 
-  user_info(params, successFn, errorFn) {
+  store_info(params, successFn, errorFn) {
     this.connection.query(
-        'CALL user_info(?, ?)',
+        'CALL store_info(?, ?)',
         [ params.no, params.id ],
       function (error, result) {
         if (error) {
@@ -47,9 +47,9 @@ module.exports = {
   },
 
 
-  pwd_update(params, successFn, errorFn) {
+  a_pwd_update(params, successFn, errorFn) {
     this.connection.query(
-        'CALL pwd_update(?, ?, ?)',
+        'CALL a_pwd_update(?, ?, ?)',
         [ params.no, params.id, params.pwd ],
       function (error, result) {
         if (error) {
@@ -77,8 +77,8 @@ module.exports = {
 
   u_add(params, successFn, errorFn) {
     this.connection.query(
-        'CALL u_add(?, ?, ?)',
-        [ params.email, params.pwd, params.token ],
+        'CALL u_add(?, ?, ?, ?)',
+        [ params.email, params.pwd, params.token, params.alias ],
       function (error, result) {
         if (error) {
           console.log(error)

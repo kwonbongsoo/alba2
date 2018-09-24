@@ -172,7 +172,10 @@
       },
       product () {
         return this.$store.getters.product;
-      }
+      },
+      alba2_login() {
+        return this.$store.getters.alba2_login
+      },
     },
     mounted() {
       this.$store.commit('add_product_btn', false)
@@ -273,7 +276,8 @@
             sold_yn: this.sold_yn == true ? 'Y' : 'N',
             original_name: this.original_name,
             o_name : this.o_name,
-            o_price : this.o_price
+            o_price : this.o_price,
+            store_no : this.alba2_login.no
           }
           console.log(params)
 
@@ -291,6 +295,7 @@
           formData.append('original_name', this.original_name)
           formData.append('o_name', this.o_name)
           formData.append('o_price', this.o_price)
+          formData.append('store_no', this.alba2_login.no)
 
 
           this.$store.commit('progress', true)

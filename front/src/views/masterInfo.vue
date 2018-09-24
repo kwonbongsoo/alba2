@@ -77,14 +77,16 @@
         this.$store.commit('add_product_btn', false)
         this.id = this.alba2_login.id
 
-        this.$store.dispatch('user_info', {
+        this.$store.dispatch('store_info', {
             no: this.alba2_login.no,
             id: this.id
         })
         .then((res) => {
             console.log(res)
-            this.bank_name = res[0].bank_name
-            this.bank_no = res[0].bank_no
+            if (res.length > 0) {
+                this.bank_name = res[0].bank_name
+                this.bank_no = res[0].bank_no
+            }
         })
     },
     methods: {
@@ -105,7 +107,7 @@
                     no: this.alba2_login.no
                 }
 
-                this.$store.dispatch('pwd_update', params)
+                this.$store.dispatch('a_pwd_update', params)
                 .then((res) => {
                     if(res == 'OK') {
                         alert('업데이트 되었습니다.')
@@ -137,7 +139,7 @@
                     id: this.id,
                     no: this.alba2_login.no
                 }
-                this.$store.dispatch('info_update', params)
+                this.$store.dispatch('store_update', params)
                 .then((res) => {
                     if(res == 'OK') {
                         alert('업데이트 되었습니다.')
