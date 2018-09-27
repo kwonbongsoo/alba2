@@ -167,6 +167,7 @@ router.get('/store_acpt_y', function(req, res, next) {
         s_no: parseInt(req.query.s_no),
         us_no: parseInt(req.query.us_no)
     }
+    console.log(params)
     storeDB.store_acpt_y(params, (result) => {
       res.json(result)
     }, (error) => {
