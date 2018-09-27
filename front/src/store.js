@@ -29,6 +29,7 @@ export default new Vuex.Store({
       pw: '',
       no: ''
     },
+    acpt_cnt: 0,
   },
 
   getters: {
@@ -52,6 +53,9 @@ export default new Vuex.Store({
     },
     alba2_login: function(state) {
       return state.alba2_login
+    },
+    acpt_cnt: function(state) {
+      return state.acpt_cnt
     }
   },
 
@@ -84,6 +88,9 @@ export default new Vuex.Store({
       state.alba2_login = alba2_login
     },
       
+    acpt_cnt: (state, acpt_cnt) => {
+      state.acpt_cnt = acpt_cnt
+    },
   },
 
   actions: {
@@ -134,32 +141,31 @@ export default new Vuex.Store({
         axios({
           method: 'post',
           params: params,
-          url: api_url + 'user/a_login',
+          url: api_url + 'store/a_login',
           responseType: 'json'
         })
         .then((res) => {
           let msg = ''
           console.log(res)
-          if (res.data[0].confirm != 0) {
+          if (res.data[0].result == 'SUCCESS') {
             context.commit('alba2_login', {
               login: true,
               id: params.id,
               pwd: params.pwd,
-              no: res.data[0].no
+              no: res.data[0].no,
+              store_name: res.data[0].store_name
             })
-            console.log(res.data[0].no)
-            msg = '로그인 성공'
           }
           else {
             context.commit('alba2_login', {
               login: false,
               id: '',
               pwd: '',
-              no: ''
+              no: '',
+              store_name: ''
             })
-            msg = '로그인 실패'
           }
-          resolve(msg)
+          resolve(res.data[0].result)
         })
       })
     },
@@ -169,7 +175,7 @@ export default new Vuex.Store({
         axios({
           method: 'post',
           params: params,
-          url: api_url + 'user/store_update',
+          url: api_url + 'store/store_update',
           responseType: 'json'
         })
         .then((res) => {
@@ -183,7 +189,7 @@ export default new Vuex.Store({
         axios({
           method: 'get',
           params: params,
-          url: api_url + 'user/store_info',
+          url: api_url + 'store/store_info',
           responseType: 'json'
         })
         .then((res) => {
@@ -204,7 +210,65 @@ export default new Vuex.Store({
           resolve(res.statusText)
         })
       })
-    }
+    },
+
+    store_acpt_nlist: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'store/store_acpt_nlist',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.data)
+        })
+      })
+    },
+
+    store_acpt_cnt: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'store/store_acpt_cnt',
+          responseType: 'json'
+        })
+        .then((res) => {
+          context.commit('acpt_cnt', res.data[0].cnt)
+          // console.log(res.data[0].cnt)
+          // resolve(res.data)
+        })
+      })
+    },
+    
+    store_acpt_y: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'store/store_acpt_y',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.statusText)
+        })
+      })
+    },
+
+    store_acpt_delete: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'store/store_acpt_delete',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.statusText)
+        })
+      })
+    },
     
 
   }

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import productList from './views/productList.vue'
 import login from './views/login.vue'
 import masterInfo from './views/masterInfo.vue'
+import userAcpt from './views/user_acpt.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -41,6 +42,14 @@ const router =  new Router({
       path: '/masterInfo',
       name: 'masterInfo',
       component: masterInfo,
+      meta: {
+        auth : store.getters.alba2_login.login
+      }
+    },
+    {
+      path: '/userAcpt',
+      name: 'userAcpt',
+      component: userAcpt,
       meta: {
         auth : store.getters.alba2_login.login
       }

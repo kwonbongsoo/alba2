@@ -88,6 +88,9 @@
                 this.bank_no = res[0].bank_no
             }
         })
+        this.$store.dispatch('store_acpt_cnt', {
+            s_no: this.alba2_login.no
+        })
     },
     methods: {
         pwdChange() {

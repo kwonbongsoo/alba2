@@ -75,11 +75,20 @@
             }
             this.$store.dispatch('a_login', params)
             .then((res) => {
-                alert(res);
-                if (res == '로그인 실패')
-                    this.pwd = ''
-                else 
+                if (res == 'SUCCESS'){
+                    alert('로그인 성공')
                     this.$router.push('/productList')
+                }
+                else if (res == 'NO_ACCOUNT') {
+                    alert('없는 계정입니다')
+                    this.pwd = ''
+                }   
+                else if (res == 'FAIL_PWD') {
+                    alert('비밀번호가 틀렸습니다')
+                    this.pwd = ''
+                }
+                
+                    
                 
             })
         },

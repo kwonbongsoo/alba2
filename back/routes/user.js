@@ -23,30 +23,6 @@ randomNum.authNo= function(n) {
 
 
 /* GET home page. */
-router.post('/a_login', function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
-  res.setHeader("Access-Control-Max-Age", "3600")
-  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
-  res.setHeader("Access-Control-Allow-Origin", "*")
-
-
-  let params = {
-    id : req.query.id,
-    pwd : req.query.pwd
-  }
-
-  userDB.a_login(params, (result) => {
-    console.log(result)
-    res.json(result)
-  }, (error) => {
-    res.status(200)
-            .set('Content-Type', 'text/plain;charset=UTF-8')
-            .end(error)
-  })
-
-  
-});
-
 
 router.post('/email_auth_confirm', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
@@ -109,67 +85,6 @@ router.get('/auth', function(req, res, next) {
   res.json('1')
 });
 
-router.get('/store_info', function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
-  res.setHeader("Access-Control-Max-Age", "3600")
-  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
-  res.setHeader("Access-Control-Allow-Origin", "*")
-
-  let params = {
-    no: parseInt(req.query.no),
-    id: req.query.id
-  }
-  
-  userDB.store_info(params, (result) => {
-    res.json(result)
-  }, (error) => {
-    res.status(200)
-            .set('Content-Type', 'text/plain;charset=UTF-8')
-            .end(error)
-  })
-});
-
-
-router.post('/store_update', function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
-  res.setHeader("Access-Control-Max-Age", "3600")
-  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
-  res.setHeader("Access-Control-Allow-Origin", "*")
-
-  let params = {
-    no: parseInt(req.query.no),
-    id: req.query.id,
-    bank_name: req.query.bank_name,
-    bank_no: req.query.bank_no
-  }
-  userDB.store_update(params, (result) => {
-    res.json(result)
-  }, (error) => {
-    res.status(200)
-            .set('Content-Type', 'text/plain;charset=UTF-8')
-            .end(error)
-  })
-});
-
-router.post('/a_pwd_update', function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
-  res.setHeader("Access-Control-Max-Age", "3600")
-  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
-  res.setHeader("Access-Control-Allow-Origin", "*")
-
-  let params = {
-    no: parseInt(req.query.no),
-    id: req.query.id,
-    pwd: req.query.pwd,
-  }
-  userDB.a_pwd_update(params, (result) => {
-    res.json(result)
-  }, (error) => {
-    res.status(200)
-            .set('Content-Type', 'text/plain;charset=UTF-8')
-            .end(error)
-  })
-})
 
 router.get('/u_add', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
@@ -187,6 +102,30 @@ router.get('/u_add', function(req, res, next) {
   console.log(params)
 
   userDB.u_add(params, (result) => {
+    res.json(result)
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
+
+
+router.post('/u_login', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  
+  let params = {
+    id: req.query.id,
+    pwd: req.query.pwd,
+    token: req.query.token
+  }
+
+  console.log(params)
+
+  userDB.u_login(params, (result) => {
     res.json(result)
   }, (error) => {
     res.status(200)

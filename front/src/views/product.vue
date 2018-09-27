@@ -176,9 +176,13 @@
       alba2_login() {
         return this.$store.getters.alba2_login
       },
+      
     },
     mounted() {
       this.$store.commit('add_product_btn', false)
+      this.$store.dispatch('store_acpt_cnt', {
+        s_no: this.alba2_login.no
+      })
       if (this.product != '') {
         this.l_option = this.product.options
         this.name = this.product.name

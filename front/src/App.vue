@@ -26,13 +26,13 @@
             <v-list-tile-title>마스터 정보</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile v-if="alba2_login.login" @click="pwdChange">
+        <v-list-tile v-if="alba2_login.login" @click="userAcptGo">
           <v-list-tile-action>
             <v-icon>add_comment</v-icon>
           </v-list-tile-action>
-          <v-list-tile-content>
+          <v-list-tile-content v-if="acpt_cnt > 0">
             <v-badge right dark>
-              <span slot="badge">2</span>
+              <span slot="badge">{{acpt_cnt}}</span>
               <span>가입 승인</span>
             </v-badge>
           </v-list-tile-content>
@@ -52,7 +52,7 @@
       class="high_sky"
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-toolbar-title v-text="alba2_login.store_name"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-show="add_product_btn" color="info" @click="productAddGo">새 상품 등록</v-btn>
     </v-toolbar>
@@ -78,7 +78,6 @@ export default {
       drawer: false,
       right: true,
       rightDrawer: false,
-      title: 'NATURE AND HUMAN'
     }
   },
   computed: {
@@ -90,8 +89,10 @@ export default {
     },
     alba2_login() {
       return this.$store.getters.alba2_login;
+    },
+    acpt_cnt() {
+      return this.$store.getters.acpt_cnt;
     }
-
   },
   methods: {
     productListGo() {
@@ -99,6 +100,9 @@ export default {
     },
     productAddGo() {
       this.$router.push('/product')
+    },
+    userAcptGo() {
+      this.$router.push('/userAcpt')
     },
     logout() {
       this.$store.commit('alba2_login', {

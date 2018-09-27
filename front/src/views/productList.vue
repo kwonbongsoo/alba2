@@ -81,6 +81,9 @@ import modal from '../components/modal'
       .then(() => {
         this.leng = parseInt(this.p_length)
       })
+      this.$store.dispatch('store_acpt_cnt', {
+        s_no: this.alba2_login.no
+      })
     },
     methods: {
       productDetail(product) {
