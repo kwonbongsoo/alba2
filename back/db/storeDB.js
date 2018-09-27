@@ -112,7 +112,7 @@ module.exports = {
         'CALL store_acpt_y(?, ?)',
         [ params.s_no, params.us_no],
       function (error, result) {
-          console.log(result[0])
+          console.log(result)
         if (error) {
           console.log(error)
           errorFn(error)
