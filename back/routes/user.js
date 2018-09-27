@@ -86,17 +86,17 @@ router.get('/auth', function(req, res, next) {
 });
 
 
-router.get('/u_add', function(req, res, next) {
+router.post('/u_add', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
   res.setHeader("Access-Control-Max-Age", "3600")
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
   res.setHeader("Access-Control-Allow-Origin", "*")
   
   let params = {
-    email: req.query.email,
-    pwd: req.query.pwd,
-    token: req.query.token,
-    alias: req.query.alias
+    email: req.body.email,
+    pwd: req.body.pwd,
+    token: req.body.token,
+    alias: req.body.alias
   }
 
   console.log(params)
@@ -118,11 +118,10 @@ router.post('/u_login', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*")
   
   let params = {
-    id: req.query.id,
-    pwd: req.query.pwd,
-    token: req.query.token
+    id: req.body.id,
+    pwd: req.body.pwd,
+    token: req.body.token
   }
-
   console.log(params)
 
   userDB.u_login(params, (result) => {
