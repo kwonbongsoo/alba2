@@ -76,7 +76,7 @@ import modal from '../components/modal'
       this.$store.commit('add_product_btn', true)
       this.$store.dispatch('l_product', {
         page: (this.page-1)*10,
-        store_no: this.alba2_login.no
+        s_no: this.alba2_login.no
       })
       .then(() => {
         this.leng = parseInt(this.p_length)
@@ -93,7 +93,7 @@ import modal from '../components/modal'
       list_req() {
         this.$store.dispatch('l_product', {
           page: (this.page-1)*10,
-          store_no: this.alba2_login.no
+          s_no: this.alba2_login.no
         })
         .then((res) => {
           console.log(res)
@@ -120,7 +120,7 @@ import modal from '../components/modal'
           })
           this.$store.dispatch('l_product', {
             page: (this.page-1)*10,
-            store_no: this.alba2_login.no
+            s_no: this.alba2_login.no
           })
           .then(() => {
             this.leng = parseInt(this.p_length)

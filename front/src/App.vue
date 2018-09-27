@@ -26,11 +26,11 @@
             <v-list-tile-title>마스터 정보</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile v-if="alba2_login.login" @click="userAcptGo">
+        <v-list-tile v-if="alba2_login.login && acpt_cnt > 0" @click="userAcptGo">
           <v-list-tile-action>
             <v-icon>add_comment</v-icon>
           </v-list-tile-action>
-          <v-list-tile-content v-if="acpt_cnt > 0">
+          <v-list-tile-content>
             <v-badge right dark>
               <span slot="badge">{{acpt_cnt}}</span>
               <span>가입 승인</span>

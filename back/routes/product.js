@@ -28,7 +28,7 @@ router.get('/l_product', function(req, res, next) {
 
   let params = {
     page: req.query.page,
-    store_no: req.query.store_no
+    store_no: req.query.s_no
   }
   productDB.l_product(params, (result) => {
     let arr = []

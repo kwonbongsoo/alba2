@@ -137,6 +137,21 @@ module.exports = {
       })
   },
 
+  store_acpt_req(params, successFn, errorFn) {
+    this.connection.query(
+        'CALL store_acpt_req(?, ?)',
+        [ params.u_no, params.s_no],
+      function (error, result) {
+          console.log(result[0])
+        if (error) {
+          console.log(error)
+          errorFn(error)
+        } else {
+          successFn(result[0])
+        }
+      })
+  },
+
   
   
 
