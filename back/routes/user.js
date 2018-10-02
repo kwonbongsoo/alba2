@@ -32,7 +32,7 @@ router.post('/email_auth_confirm', function(req, res, next) {
   let confirm_no = randomNum.authNo(5);
 
   let params = {
-    email: req.query.email,
+    email: req.body.email,
     confirm_no: confirm_no
   }
 
