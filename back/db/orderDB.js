@@ -18,6 +18,21 @@ module.exports = {
         }
       })
   },
+
+
+  u_order_list(params, successFn, errorFn) {
+    this.connection.query(
+        'CALL u_order_list(?, ?, ?, ?)',
+        [params.u_no, params.s_no, params.s_dt ,params.e_dt],
+      function (error, result) {
+        if (error) {
+          console.log(error)
+          errorFn(error)
+        } else {
+          successFn(result)
+        }
+      })
+  },
   
 
   

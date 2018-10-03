@@ -34,4 +34,30 @@ router.post('/c_order', function(req, res, next) {
   })
 });
 
+
+router.get('/u_order_list', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+      u_no: parseInt(req.query.u_no),
+      s_no: parseInt(req.query.s_no),
+      s_dt: req.query.s_dt+'-01',
+      e_dt: req.query.s_dt+'-31'
+  }
+
+  console.log(params)
+
+  orderDB.u_order_list(params, (result) => {
+    res.json(result)
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+    res.json(error);
+  })
+});
+
 module.exports = router;
