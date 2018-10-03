@@ -36,10 +36,7 @@ router.post('/email_auth_confirm', function(req, res, next) {
     confirm_no: confirm_no
   }
   console.log(params)
-  console.log(req)
-  req.on('email', (email) => {
-    console.log(JSON.parse(email))
-  })
+  console.log(req.body)
 
   userDB.email_auth_confirm(params, (result) => {
     if (result[0].result === 'SEND') {
