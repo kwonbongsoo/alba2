@@ -46,9 +46,9 @@ router.post('/email_auth_confirm', function(req, res, next) {
       });
     
       let mailOptions = {
-        from: 'start1231076@gmail.com',    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
+        from: mailData.user,    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
         to: email ,                     // 수신 메일 주소
-        subject: '안녕하세요, 자연과 사랑입니다. 이메일 인증을 해주세요.',   // 제목
+        subject: '안녕하세요, 자연과 사람입니다. 이메일 인증을 해주세요.',   // 제목
         // text: 'That was easy!'  // 내용
         html: '<p>아래의 번호를 입력해주세요!</p>' +
               "<p>"+params.confirm_no+"</p>" 
