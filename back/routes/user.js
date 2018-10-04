@@ -68,8 +68,6 @@ router.post('/email_auth_confirm', function(req, res, next) {
             res.json(result[0])
         }
       });
-
-      
     }
     
   }, (error) => {
