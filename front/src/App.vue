@@ -37,6 +37,30 @@
             </v-badge>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile @click="orderGo">
+          <v-list-tile-action>
+            <v-icon>assignment</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>주문 조회</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile @click="statisticsGo">
+          <v-list-tile-action>
+            <v-icon>assessment</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>주문 통계</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile @click="statisticsGo">
+          <v-list-tile-action>
+            <v-icon>cancel_presentation</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>취소요청</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <v-list-tile v-if="alba2_login.login" @click="logout">
           <v-list-tile-action>
             <v-icon>subdirectory_arrow_right</v-icon>
@@ -96,13 +120,13 @@ export default {
   },
   methods: {
     productListGo() {
-      this.$router.push('/productList')
+      this.$router.push('/productList');
     },
     productAddGo() {
-      this.$router.push('/product')
+      this.$router.push('/product');
     },
     userAcptGo() {
-      this.$router.push('/userAcpt')
+      this.$router.push('/userAcpt');
     },
     logout() {
       this.$store.commit('alba2_login', {
@@ -110,10 +134,19 @@ export default {
           id: '',
           pwd: ''
       })
-      this.$router.push('/login')
+      this.$router.push('/login');
     },
     pwdChange() {
-      this.$router.push('/masterInfo')
+      this.$router.push('/masterInfo');
+    },
+    orderGo() {
+      this.$router.push('/order');
+    },
+    statisticsGo() {
+      this.$router.push('/statistics');
+    },
+    cancelListGo() {
+      this.$router.push('/cancelList');
     }
   }
 }

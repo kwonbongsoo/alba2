@@ -36,7 +36,6 @@ router.post('/email_auth_confirm', function(req, res, next) {
     confirm_no: confirm_no
   }
   console.log(params)
-  console.log(req.body)
 
   userDB.email_auth_confirm(params, (result) => {
     if (result[0].result === 'SEND') {
@@ -79,13 +78,45 @@ router.post('/email_auth_confirm', function(req, res, next) {
 });
 
 
-router.get('/auth', function(req, res, next) {
+router.post('/find_pwd', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
   res.setHeader("Access-Control-Max-Age", "3600")
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
   res.setHeader("Access-Control-Allow-Origin", "*")
 
-  res.json('1')
+
+  let email = req.body.email;
+  let confirm_no = randomNum.authNo(5);
+ 
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: mailData
+    });
+  
+    let mailOptions = {
+      from: mailData.user,    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
+      to: email ,                     // 수신 메일 주소
+      subject: '안녕하세요, 자연과 사람입니다. 비밀번호를 찾으시려면 인증번호를 입력해주세요.',   // 제목
+      // text: 'That was easy!'  // 내용
+      html: '<p>아래의 번호를 입력해주세요!</p>' +
+            "<p>"+ confirm_no +"</p>" 
+    };
+  
+  
+    transporter.sendMail(mailOptions, function(error, info){
+      let result
+      if (error) {
+          console.log(error);
+          result.result = 'not send'
+          res.json(result)
+      }
+      else {
+          console.log('Email sent: ' + info.response);
+          result.result = 'SEND'
+          result.confirm_no = confirm_no
+          res.json(result)
+      }
+    });
 });
 
 
@@ -135,5 +166,59 @@ router.post('/u_login', function(req, res, next) {
             .end(error)
   })
 });
+
+
+router.post('/u_pwd_change', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    u_no: parseInt(req.body.u_no, 10),
+    u_email: req.body.email,
+    u_pwd_confirm: req.body.u_pwd_confirm,
+    u_new_pwd: req.body.u_new_pwd
+  }
+
+  console.log(params);
+
+  userDB.u_pwd_change(params, (result) => {
+    console.log(result)
+    res.json(result)
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+
+  
+});
+
+
+router.post('/u_pwd_reset', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    email: req.body.email,
+    reset_pwd: randomNum.authNo(6)
+  }
+
+  console.log(params);
+
+  userDB.u_pwd_reset(params, (result) => {
+    console.log(result)
+    res.json(result)
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
+
+
 
 module.exports = router;

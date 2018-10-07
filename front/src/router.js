@@ -4,6 +4,9 @@ import productList from './views/productList.vue'
 import login from './views/login.vue'
 import masterInfo from './views/masterInfo.vue'
 import userAcpt from './views/user_acpt.vue'
+import order from './views/order.vue'
+import statistics from './views/statistics.vue'
+import cancelList from './views/cancelList.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -50,6 +53,30 @@ const router =  new Router({
       path: '/userAcpt',
       name: 'userAcpt',
       component: userAcpt,
+      meta: {
+        auth : store.getters.alba2_login.login
+      }
+    },
+    {
+      path: '/order',
+      name: 'order',
+      component: order,
+      meta: {
+        auth : store.getters.alba2_login.login
+      }
+    },
+    {
+      path: '/statistics',
+      name: 'statistics',
+      component: statistics,
+      meta: {
+        auth : store.getters.alba2_login.login
+      }
+    },
+    {
+      path: '/cancelList',
+      name: 'cancelList',
+      component: cancelList,
       meta: {
         auth : store.getters.alba2_login.login
       }

@@ -30,6 +30,11 @@ export default new Vuex.Store({
       no: ''
     },
     acpt_cnt: 0,
+    o_list: '',
+    statistics_list: '',
+    delivery_info: {
+      order_no: ''
+    }
   },
 
   getters: {
@@ -56,7 +61,16 @@ export default new Vuex.Store({
     },
     acpt_cnt: function(state) {
       return state.acpt_cnt
-    }
+    },
+    o_list: function(state) {
+      return state.o_list
+    },
+    statistics_list: function(state) {
+      return state.statistics_list
+    },
+    delivery_info: function(state) {
+      return state.delivery_info
+    },
   },
 
   mutations: {
@@ -90,6 +104,15 @@ export default new Vuex.Store({
       
     acpt_cnt: (state, acpt_cnt) => {
       state.acpt_cnt = acpt_cnt
+    },
+    o_list: (state, o_list) => {
+      state.o_list = o_list
+    },
+    statistics_list: (state, statistics_list) => {
+      state.statistics_list = statistics_list
+    },
+    delivery_info: (state, delivery_info) => {
+      state.delivery_info = delivery_info
     },
   },
 
@@ -269,7 +292,52 @@ export default new Vuex.Store({
         })
       })
     },
-    
 
+    s_l_order: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'order/s_l_order',
+          responseType: 'json'
+        })
+        .then((res) => {
+          console.log(res.data)
+          context.commit('o_list', res.data);
+          resolve(res.data[0])
+        })
+      })
+    },
+
+    s_o_statistics: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'order/s_o_statistics',
+          responseType: 'json'
+        })
+        .then((res) => {
+          console.log(res.data)
+          context.commit('statistics_list', res.data);
+          resolve(res.data[0])
+        })
+      })
+    },
+
+    pay_confirm: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'order/pay_confirm',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.data)
+        })
+      })
+    },
+    
   }
 })

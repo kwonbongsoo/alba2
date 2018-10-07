@@ -47,6 +47,34 @@ module.exports = {
       })
   },
 
+
+  u_pwd_change(params, successFn, errorFn) {
+    this.connection.query(
+        'CALL u_pwd_change(?, ?, ?, ?)',
+        [ params.u_no, params.u_email, params.u_pwd_confirm, params.u_new_pwd ],
+      function (error, result) {
+        if (error) {
+          console.log(error)
+          errorFn(error)
+        } else {
+          successFn(result[0])
+        }
+      })
+  },
+
+  u_pwd_reset(params, successFn, errorFn) {
+    this.connection.query(
+        'CALL u_pwd_reset(?, ?)',
+        [ params.email, params.reset_pwd],
+      function (error, result) {
+        if (error) {
+          console.log(error)
+          errorFn(error)
+        } else {
+          successFn(result[0])
+        }
+      })
+  },
   
   
 
