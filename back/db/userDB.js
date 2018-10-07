@@ -35,8 +35,8 @@ module.exports = {
 
   u_add(params, successFn, errorFn) {
     this.connection.query(
-        'CALL u_add(?, ?, ?, ?)',
-        [ params.email, params.pwd, params.token, params.alias ],
+        'CALL u_add(?, ?, ?, ?, ?, ?)',
+        [ params.email, params.pwd, params.token, params.alias, params.addr, params.addr_detail ],
       function (error, result) {
         if (error) {
           console.log(error)
@@ -66,6 +66,20 @@ module.exports = {
     this.connection.query(
         'CALL u_pwd_reset(?, ?)',
         [ params.email, params.reset_pwd],
+      function (error, result) {
+        if (error) {
+          console.log(error)
+          errorFn(error)
+        } else {
+          successFn(result[0])
+        }
+      })
+  },
+
+  u_update(params, successFn, errorFn) {
+    this.connection.query(
+        'CALL u_update(?, ?, ?, ?)',
+        [ params.u_no, params.alias, params.addr, params.addr_detail],
       function (error, result) {
         if (error) {
           console.log(error)

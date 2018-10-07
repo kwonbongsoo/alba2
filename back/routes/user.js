@@ -130,7 +130,9 @@ router.post('/u_add', function(req, res, next) {
     email: req.body.email,
     pwd: req.body.pwd,
     token: req.body.token,
-    alias: req.body.alias
+    alias: req.body.alias,
+    addr: req.body.addr,
+    addr_detail: req.body.addr_detail
   }
 
   console.log(params)
@@ -210,6 +212,31 @@ router.post('/u_pwd_reset', function(req, res, next) {
   console.log(params);
 
   userDB.u_pwd_reset(params, (result) => {
+    console.log(result)
+    res.json(result)
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
+
+router.get('/u_update', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    u_no: parseInt(req.query.u_no),
+    alias: req.query.alias,
+    addr: req.query.addr,
+    addr_detail: req.query.addr_detail
+  }
+
+  console.log(params);
+
+  userDB.u_update(params, (result) => {
     console.log(result)
     res.json(result)
   }, (error) => {
