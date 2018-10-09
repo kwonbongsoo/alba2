@@ -3,18 +3,32 @@
         <div class="order_container">
             <v-layout row wrap>
                 <div class="date_div">
-                    <v-select
-                        :items="items"
-                        v-model="select"
-                        return-object
-                        label="주문 상태 선택"
-                        solo
-                        class="inline_block"
-                        item-text="state"
-                        item-value="abbr"
-                        color="info"
-                    ></v-select>
+                    <v-flex xs2 sm2 md2 class="inline_block">
+                        <v-select
+                            :items="items"
+                            v-model="select"
+                            return-object
+                            label="주문 상태 선택"
+                            solo
+                            class="inline_block width"
+                            item-text="state"
+                            item-value="abbr"
+                            color="info"
+                        ></v-select>
+                    </v-flex>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    
+                <v-flex xs2 sm2 md2 class="inline_block margin_bottom">
+                    <v-text-field
+                        solo
+                        v-model="search"
+                        color="info"
+                        label="주문자 검색"
+                        append-icon="search"
+                        max-length="20"
+                    ></v-text-field>
+                </v-flex>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <v-flex xs6 sm6 md6 class="inline_block">
                     <v-menu
                         ref="menu1"
@@ -65,6 +79,7 @@
 
                     </v-menu>
                 </v-flex>
+                
                 <v-btn class="btn abs" color="info" @click="selectData">조회</v-btn>
                 </div>
             </v-layout>
@@ -94,7 +109,12 @@
                 <td class="text-xs-center bold">{{ props.item.delivery_no }}</td>
                 <td v-if="props.item.status > 0" class="text-xs-center bold padding_zero"><v-btn class="btn" color="info" @click="delivery_modify(props.item.no)">수정</v-btn></td>
                 <td v-else class="text-xs-center">*</td>
-                <td class="text-xs-center bold">{{ props.item.cancel_yn }}</td>
+                <td v-if="props.item.cancel_yn == 'Y'" class="text-xs-center bold">취소</td>
+                <td v-else-if="props.item.cancel_yn == 'N'" class="text-xs-center bold"><v-btn class="btn" color="info" @click="order_cancel(props.item.no)">상점주문취소</v-btn></td>
+                <td v-else class="text-xs-center bold">
+                    <v-btn class="btn" color="error" @click="o_cancel_y(props.item.no)">취소승낙</v-btn>
+                    <v-btn class="btn" color="success" @click="o_cancel_n(props.item.no)">취소거부</v-btn>
+                </td>
                 <td v-if="props.item.cancel_yn == 'Y'" class="text-xs-center bold">취소완료</td>
                 <td v-else-if="props.item.status == 0" class="text-xs-center bold padding_zero"><v-btn class="btn" color="info" @click="pay_confirm(props.item.no)">입금확인</v-btn></td>
                 <td v-else class="text-xs-center bold">{{ props.item.status == 1 ? '배송중' : '거래완료' }}</td>
@@ -109,7 +129,7 @@
             @input="list_req"
             ></v-pagination>
         </v-footer>
-        <modal v-if="dialog.dialog" @selectData="selectData"/>
+        <modal v-if="dialog.dialog" @list_req="list_req"/>
     </div>
 </template>
 
@@ -150,12 +170,15 @@ import modal from '../components/modal'
             { text: '택배회사', align: 'center', sortable: false, class: 'bold' },
             { text: '송장번호', align: 'center', sortable: false, class: 'bold' },
             { text: '송장수정', align: 'center', sortable: false, class: 'bold' },
-            { text: '취소여부', align: 'center', sortable: false, class: 'bold' },
+            { text: '취소', align: 'center', sortable: false, class: 'bold' },
             { text: '주문상태', align: 'center', sortable: false, class: 'bold' },
         ],
         order_pay_confirm_data: {
             order_no: '',
-        }
+        },
+        search: '',
+        search_data: '',
+        reason: '',
     }),
     computed: {
       alba2_login() {
@@ -184,6 +207,7 @@ import modal from '../components/modal'
         this.today = year+ '-' +month+ '-' +day;
         this.$store.commit('o_list', '');
         this.$store.commit('delivery_info', '');
+        this.$store.commit('s_order_cancel_info', '');
     },
     methods: {
         changeDate (a) {
@@ -215,12 +239,18 @@ import modal from '../components/modal'
             else {
                 this.page = 1;
                 this.start = (this.page - 1) * 30;
+                if (this.search != '')
+                    this.search_data = '%' + this.search + '%'
+                else {
+                    this.search_data = '%'
+                }
                 let params = {
                     s_no: this.alba2_login.no,
                     s_dt: this.s_dt,
                     e_dt: this.e_dt,
                     page: this.start,
-                    status: this.select.no
+                    status: this.select.no,
+                    search: this.search_data
                 }
                 console.log(params)
                 this.$store.dispatch('s_l_order', params).then((res) => {
@@ -235,12 +265,18 @@ import modal from '../components/modal'
         },
         list_req () {
             this.start = (this.page - 1) * 30;
+            if (this.search != '')
+                this.search_data = '%' + this.search + '%'
+            else {
+                this.search_data = '%'
+            }
             this.$store.dispatch('s_l_order', {
                 s_no: this.alba2_login.no,
                 s_dt: this.s_dt,
                 e_dt: this.e_dt,
                 page: this.start,
-                status: this.select.no
+                status: this.select.no,
+                search: this.search_data
             }).then((res) => {
                 this.o_length = res.total / 30;
                 this.o_length = parseInt(this.o_length, 10);
@@ -268,6 +304,63 @@ import modal from '../components/modal'
                 title: '송장 수정',
                 content: '송장정보를 수정하세요'
             })
+        },
+        order_cancel (no) {
+            console.log(no)
+            this.$store.commit('s_order_cancel_info' ,{
+                s_no: this.alba2_login.no,
+                o_no: no
+            })
+            this.$store.commit('dialog', {
+                dialog: true,
+                title: '상점 주문 취소',
+                content: '주문 취소 사유를 적어주세요. (사용자에게 푸시로 알려줍니다)'
+            })
+            
+        },
+        o_cancel_y (no) {
+          console.log(no)
+          let confirm = window.confirm('주문 취소를 승낙 하시겠습니까?')
+
+          if (confirm) {
+            let params = {
+              s_no: this.alba2_login.no,
+              o_no: no
+            }
+
+            this.$store.dispatch('o_cancel_y', params).then((res) => {
+              console.log(res)
+              if(res.result == 'SUCCESS') {
+                alert('취소를 완료했습니다.')
+                this.list_req()
+              }
+              else {
+                alert('나중에 다시 시도해주세요')
+              }
+              
+            })
+          }
+        },
+        o_cancel_n (no) {
+          console.log(no)
+          let confirm = window.confirm('주문 취소를 거부 하시겠습니까?')
+
+          if (confirm) {
+            let params = {
+              s_no: this.alba2_login.no,
+              o_no: no
+            }
+
+            this.$store.dispatch('o_cancel_n', params).then((res) => {
+              if(res.result == 'SUCCESS') {
+                alert('취소 거부를 완료했습니다.')
+                this.list_req()
+              }
+              else {
+                alert('나중에 다시 시도해주세요')
+              }
+            })
+          }
         }
     }
   }
@@ -280,7 +373,7 @@ import modal from '../components/modal'
 
 .abs {
   position: absolute;
-  top: 5px;
+  top: 10px;
 }
 .date_div {
   position: relative;

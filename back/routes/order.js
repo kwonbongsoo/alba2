@@ -73,7 +73,8 @@ router.get('/s_l_order', function(req, res, next) {
     s_dt: req.query.s_dt,
     e_dt: req.query.e_dt,
     page: parseInt(req.query.page, 10),
-    status: parseInt(req.query.status, 10)
+    status: parseInt(req.query.status, 10),
+    search: req.query.search
   }
 
   console.log(params)
@@ -236,6 +237,97 @@ router.get('/u_o_cancel_cancel', function(req, res, next) {
             .end(error)
   })
 })
+
+router.get('/s_order_cancel', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    s_no: parseInt(req.query.s_no, 10),
+    o_no: parseInt(req.query.o_no, 10),
+    reason: req.query.reason
+  }
+  console.log(params);
+
+  orderDB.s_order_cancel(params, (result) => {
+    console.log(result)
+    res.json(result[0])
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
+
+router.get('/s_l_cancel_req', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    s_no: parseInt(req.query.s_no, 10)
+  }
+  console.log(params);
+
+  orderDB.s_l_cancel_req(params, (result) => {
+    console.log(result)
+    res.json(result[0])
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
+
+
+router.get('/o_cancel_n', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    s_no: parseInt(req.query.s_no, 10),
+    o_no: parseInt(req.query.o_no)
+  }
+  console.log(params);
+
+  orderDB.o_cancel_n(params, (result) => {
+    console.log(result)
+    res.json(result[0])
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
+
+router.get('/o_cancel_y', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    s_no: parseInt(req.query.s_no, 10),
+    o_no: parseInt(req.query.o_no)
+  }
+  console.log(params);
+
+  orderDB.o_cancel_y(params, (result) => {
+    console.log(result)
+    res.json(result[0])
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
+
+
 
 
 module.exports = router;

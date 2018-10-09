@@ -47,6 +47,21 @@
             <v-btn color="darken-1" flat @click="pay_confirm">확인</v-btn>
           </v-card-actions>
         </v-card>
+
+        <v-card v-else-if="dialog.title == '상점 주문 취소'">
+          <v-card-title class="headline">{{dialog.title}}</v-card-title>
+          <v-card-text class="padding_bottom">{{dialog.content}}</v-card-text>
+            <v-card-text class="padding_top">
+              <v-flex xs12>
+                <v-text-field label="취소 사유(20자 이하)" color="info" v-model='reason' required maxLength='20'></v-text-field>
+              </v-flex>
+            </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="darken-1 bold" flat @click="dialog_hide">취소</v-btn>
+            <v-btn color="darken-1" flat @click="s_order_cancel">확인</v-btn>
+          </v-card-actions>
+        </v-card>
       </v-dialog>
     </v-layout>
   </div>
@@ -61,6 +76,7 @@ export default {
     delivery_name: '',
     delivery_no: '',
     cnt: 0,
+    reason: '',
   }),
   computed: {
     dialog() {
@@ -68,6 +84,9 @@ export default {
     },
     delivery_info () {
       return this.$store.getters.delivery_info;
+    },
+    s_order_cancel_info () {
+      return this.$store.getters.s_order_cancel_info;
     }
   },
   mounted() {
@@ -93,7 +112,7 @@ export default {
         .then((res) => {
           this.$store.commit('progress', false)
           if(res == 'SUCCESS' || res == 'MODIFY') {
-            this.$emit('selectData');
+            this.$emit('list_req');
           }
           this.$store.commit('dialog', {
             dialog: false
@@ -102,6 +121,35 @@ export default {
         this.cnt++;
       
       }
+    },
+    s_order_cancel() {
+      let params = {
+        s_no: this.s_order_cancel_info.s_no,
+        o_no: this.s_order_cancel_info.o_no,
+        reason: this.reason
+      }
+
+      console.log(params)
+
+      if (this.cnt < 1) {
+        this.$store.commit('progress', true)
+        this.$store.dispatch('s_order_cancel', params)
+        .then((res) => {
+          console.log(res)
+          if(res.result == 'SUCCESS') {
+            this.$emit('list_req');
+            alert('주문이 정상적으로 취소 됬습니다.')
+          }
+          this.$store.commit('dialog', {
+            dialog: false
+          })
+          this.$store.commit('progress', false)
+        })
+        this.cnt++;
+      
+      }
+
+      
     }
   }
 }

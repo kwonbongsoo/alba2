@@ -173,10 +173,13 @@
                 console.log(params)
                 this.$store.dispatch('s_o_statistics', params).then((res) => {
                     // console.log(res)
-                    this.o_length = res.total / 30;
-                    this.o_length = parseInt(this.o_length, 10);
-                    if (res.total % 30 > 0) {
-                    this.o_length += 1;
+                    if (res) {
+                        this.o_length = res.total / 30;
+                        this.o_length = parseInt(this.o_length, 10);
+                        // console.log(res);
+                        if (res.total % 30 > 0) {
+                            this.o_length += 1;
+                        }
                     }
                 });
             }
@@ -189,12 +192,15 @@
                 e_dt: this.e_dt,
                 page: this.start
             }).then((res) => {
-                this.o_length = res.total / 30;
-                this.o_length = parseInt(this.o_length, 10);
-                // console.log(res);
-                if (res.total % 30 > 0) {
-                this.o_length += 1;
+                if (res) {
+                    this.o_length = res.total / 30;
+                    this.o_length = parseInt(this.o_length, 10);
+                    // console.log(res);
+                    if (res.total % 30 > 0) {
+                        this.o_length += 1;
+                    }
                 }
+                
             });
         },
         formatPrice (value) {
@@ -212,7 +218,7 @@
 
 .abs {
   position: absolute;
-  top: 5px;
+  top: 10px;
 }
 .date_div {
   position: relative;

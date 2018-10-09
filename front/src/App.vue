@@ -53,7 +53,7 @@
             <v-list-tile-title>주문 통계</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click="statisticsGo">
+        <v-list-tile @click="cancelListGo">
           <v-list-tile-action>
             <v-icon>cancel_presentation</v-icon>
           </v-list-tile-action>
@@ -148,6 +148,7 @@ export default {
     cancelListGo() {
       this.$router.push('/cancelList');
     }
+    
   }
 }
 </script>

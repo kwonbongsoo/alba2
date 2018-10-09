@@ -34,7 +34,11 @@ export default new Vuex.Store({
     statistics_list: '',
     delivery_info: {
       order_no: ''
-    }
+    },
+    s_order_cancel_info: {
+      s_no: '',
+      o_no: ''
+    },
   },
 
   getters: {
@@ -70,6 +74,9 @@ export default new Vuex.Store({
     },
     delivery_info: function(state) {
       return state.delivery_info
+    },
+    s_order_cancel_info: function(state) {
+      return state.s_order_cancel_info
     },
   },
 
@@ -113,6 +120,9 @@ export default new Vuex.Store({
     },
     delivery_info: (state, delivery_info) => {
       state.delivery_info = delivery_info
+    },
+    s_order_cancel_info: (state, s_order_cancel_info) => {
+      state.s_order_cancel_info = s_order_cancel_info
     },
   },
 
@@ -335,6 +345,65 @@ export default new Vuex.Store({
         })
         .then((res) => {
           resolve(res.data)
+        })
+      })
+    },
+
+    s_order_cancel: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'order/s_order_cancel',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.data[0])
+        })
+      })
+    },
+    
+    s_l_cancel_req: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'order/s_l_cancel_req',
+          responseType: 'json'
+        })
+        .then((res) => {
+          console.log(res)
+          resolve(res.data)
+        })
+      })
+    },
+
+    o_cancel_n: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'order/o_cancel_n',
+          responseType: 'json'
+        })
+        .then((res) => {
+          console.log(res)
+          resolve(res.data[0])
+        })
+      })
+    },
+
+    o_cancel_y: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'order/o_cancel_y',
+          responseType: 'json'
+        })
+        .then((res) => {
+          console.log(res)
+          resolve(res.data[0])
         })
       })
     },

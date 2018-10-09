@@ -36,8 +36,8 @@ module.exports = {
 
   s_l_order(params, successFn, errorFn) {
     this.connection.query(
-        'CALL s_l_order(?, ?, ?, ?, ?)',
-        [params.s_no, params.s_dt, params.e_dt ,params.page, params.status],
+        'CALL s_l_order(?, ?, ?, ?, ?, ?)',
+        [params.s_no, params.s_dt, params.e_dt ,params.page, params.status, params.search],
       function (error, result) {
         if (error) {
           console.log(error)
@@ -111,6 +111,63 @@ module.exports = {
     this.connection.query(
       'CALL u_o_cancel_cancel(?, ?)',
       [params.u_no, params.o_no],
+    function (error, result) {
+      if (error) {
+        console.log(error)
+        errorFn(error)
+      } else {
+        successFn(result)
+      }
+    })
+  },
+
+
+  s_order_cancel(params, successFn, errorFn) {
+    this.connection.query(
+      'CALL s_order_cancel(?, ?, ?)',
+      [params.s_no, params.o_no, params.reason],
+    function (error, result) {
+      if (error) {
+        console.log(error)
+        errorFn(error)
+      } else {
+        successFn(result)
+      }
+    })
+  },
+
+  s_l_cancel_req(params, successFn, errorFn) {
+    this.connection.query(
+      'CALL s_l_cancel_req(?)',
+      [params.s_no],
+    function (error, result) {
+      if (error) {
+        console.log(error)
+        errorFn(error)
+      } else {
+        successFn(result)
+      }
+    })
+  },
+
+  o_cancel_n(params, successFn, errorFn) {
+    this.connection.query(
+      'CALL o_cancel_n(?, ?)',
+      [params.s_no, params.o_no],
+    function (error, result) {
+      if (error) {
+        console.log(error)
+        errorFn(error)
+      } else {
+        successFn(result)
+      }
+    })
+  },
+
+  o_cancel_y(params, successFn, errorFn) {
+    this.connection.query(
+      'CALL o_cancel_y(?, ?)',
+      [params.s_no, params.o_no],
     function (error, result) {
       if (error) {
         console.log(error)
