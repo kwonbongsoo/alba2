@@ -7,8 +7,8 @@ module.exports = {
 
   c_order(params, successFn, errorFn) {
     this.connection.query(
-        'CALL c_order(?, ?, ?, ?, ?, ?, ?)',
-        [params.u_no, params.s_no, params.total_price ,params.item_price , params.item_name , params.item_cnt, params.item_option],
+        'CALL c_order(?, ?, ?, ?, ?, ?, ?, ?)',
+        [params.u_no, params.s_no, params.total_price ,params.item_price , params.item_name , params.item_cnt, params.item_option, params.item_no],
       function (error, result) {
         if (error) {
           console.log(error)
@@ -65,7 +65,21 @@ module.exports = {
 
   pay_confirm(params, successFn, errorFn) {
     this.connection.query(
-        'CALL pay_confirm(?, ?, ?)',
+        'CALL pay_confirm(?)',
+        [params.order_no],
+      function (error, result) {
+        if (error) {
+          console.log(error)
+          errorFn(error)
+        } else {
+          successFn(result)
+        }
+      })
+  },
+
+  delivery_start(params, successFn, errorFn) {
+    this.connection.query(
+        'CALL delivery_start(?, ?, ?)',
         [params.order_no, params.delivery_name, params.delivery_no],
       function (error, result) {
         if (error) {

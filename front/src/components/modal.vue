@@ -12,7 +12,7 @@
           </v-card-actions>
         </v-card>
 
-        <v-card v-else-if="dialog.title == '입금 확인'">
+        <v-card v-else-if="dialog.title == '배송 시작'">
           <v-card-title class="headline">{{dialog.title}}</v-card-title>
           <v-card-text class="padding_bottom">{{dialog.content}}</v-card-text>
             <v-card-text class="padding_top">
@@ -26,7 +26,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="darken-1 bold" flat @click="dialog_hide">취소</v-btn>
-            <v-btn color="darken-1" flat @click="pay_confirm">확인</v-btn>
+            <v-btn color="darken-1" flat @click="delivery_start">확인</v-btn>
           </v-card-actions>
         </v-card>
 
@@ -44,7 +44,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="darken-1 bold" flat @click="dialog_hide">취소</v-btn>
-            <v-btn color="darken-1" flat @click="pay_confirm">확인</v-btn>
+            <v-btn color="darken-1" flat @click="delivery_start">확인</v-btn>
           </v-card-actions>
         </v-card>
 
@@ -100,7 +100,7 @@ export default {
         })
       }
     },
-    pay_confirm() {
+    delivery_start() {
       let params = {
         delivery_name: this.delivery_name,
         delivery_no: this.delivery_no,
@@ -108,10 +108,11 @@ export default {
       };
       if (this.cnt < 1) {
         this.$store.commit('progress', true)
-        this.$store.dispatch('pay_confirm', params)
+        this.$store.dispatch('delivery_start', params)
         .then((res) => {
           this.$store.commit('progress', false)
           if(res == 'SUCCESS' || res == 'MODIFY') {
+            alert('송장 정보가 변경되었습니다.')
             this.$emit('list_req');
           }
           this.$store.commit('dialog', {

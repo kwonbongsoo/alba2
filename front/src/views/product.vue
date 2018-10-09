@@ -4,7 +4,7 @@
       <v-text-field
         v-model="name"
         :error-messages="nameErrors"
-        :counter="10"
+        :counter="15"
         color="info"
         label="상품 이름"
         required
@@ -31,6 +31,17 @@
         required
         @input="$v.price.$touch()"
         @blur="$v.price.$touch()"
+      ></v-text-field>
+      <v-text-field
+        v-model="total_cnt"
+        :error-messages="total_cntErrors"
+        :counter="15"
+        color="info"
+        label="총수량"
+        type="number"
+        required
+        @input="$v.total_cnt.$touch()"
+        @blur="$v.total_cnt.$touch()"
       ></v-text-field>
 
       <div>
@@ -121,9 +132,10 @@
     mixins: [validationMixin],
 
     validations: {
-      name: { required, maxLength: maxLength(10) },
+      name: { required, maxLength: maxLength(15) },
       desc: { required,  maxLength: maxLength(20) },
-      price: { required, maxLength: maxLength(20) }
+      price: { required, maxLength: maxLength(10) },
+      total_cnt: { required, maxLength: maxLength(10) }
     },
 
     data: () => ({
@@ -147,6 +159,7 @@
       o_price: '',
       activeTab: '',
       l_o_idx: -1,
+      total_cnt: '',
     }),
     computed: {
       nameErrors () {
@@ -170,6 +183,13 @@
         !this.$v.price.required && errors.push('상품 가격을 입력하세요')
         return errors
       },
+      total_cntErrors () {
+        const errors = []
+        if (!this.$v.total_cnt.$dirty) return errors
+        !this.$v.total_cnt.maxLength && errors.push('총 수량이 너무 깁니다')
+        !this.$v.total_cnt.required && errors.push('총 수량을 입력하세요')
+        return errors
+      },
       product () {
         return this.$store.getters.product;
       },
@@ -179,7 +199,8 @@
       
     },
     mounted() {
-      this.$store.commit('add_product_btn', false)
+      this.$store.commit('add_product_btn', false);
+        this.$store.commit('add_notice_btn', false);
       this.$store.dispatch('store_acpt_cnt', {
         s_no: this.alba2_login.no
       })
@@ -192,6 +213,7 @@
         this.imageName = this.product.img_name
         this.imageUrl = this.product.img_url
         this.no = this.product.no
+        this.total_cnt = this.product.total_cnt
       } 
 
     },
@@ -216,6 +238,7 @@
         this.optionSubmit = ''
         this.sold_yn = ''
         this.inputFileValue = ''
+        this.total_cnt = ''
 
       },
       pickFile () {
@@ -247,8 +270,13 @@
         this.imageUrl = ''
       },
       submit() {
+        this.price = this.price + ''
+        this.total_cnt = this.total_cnt + ''
         if (this.name == '') {
           alert('상품 이름을 입력하세요')
+        }
+        else if (this.name.length > 15) {
+          alert('상품 이름이 너무 깁니다')
         }
         else if (this.desc == '') {
           alert('상품 설명을 입력하세요')
@@ -256,14 +284,27 @@
         else if (this.price == '') {
           alert('상품 가격을 입력하세요')
         }
+        else if (this.price.length > 10) {
+          alert('상품 가격이 너무 깁니다')
+        }
         else if (this.imageFile.size > 1000000) {
           alert('이미지 사이즈가 큽니다. 1M 이하로 업로드하세요')
         }
         else if (this.$route.params.no != '0' && this.imageName == '') {
           alert('이미지를 선택해주세요.')
         }
+        else if (this.total_cnt == '' || this.total_cnt < 1) {
+          alert('수량을 입력해주세요')
+        }
+        else if (this.total_cnt.length > 10) {
+          alert('수량을 다시 입력해주세요')
+        }
         else {
+
+          console.log(this.total_cnt.length)
           console.log(this.l_option.length)
+          this.total_cnt = parseInt(this.total_cnt, 10);
+          this.price = parseInt(this.price, 10);
           for (let i = 0; i < this.l_option.length; i++) {
             this.o_name += this.l_option[i].name + ','
             this.o_price += this.l_option[i].price + ','
@@ -281,7 +322,8 @@
             original_name: this.original_name,
             o_name : this.o_name,
             o_price : this.o_price,
-            store_no : this.alba2_login.no
+            store_no : this.alba2_login.no,
+            total_cnt : this.total_cnt
           }
           console.log(params)
 
@@ -300,6 +342,7 @@
           formData.append('o_name', this.o_name)
           formData.append('o_price', this.o_price)
           formData.append('store_no', this.alba2_login.no)
+          formData.append('total_cnt', this.total_cnt)
 
 
           this.$store.commit('progress', true)

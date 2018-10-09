@@ -7,6 +7,8 @@ import userAcpt from './views/user_acpt.vue'
 import order from './views/order.vue'
 import statistics from './views/statistics.vue'
 import cancelList from './views/cancelList.vue'
+import noticeDetail from './views/notice_detail.vue'
+import noticeList from './views/noticeList.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -77,6 +79,22 @@ const router =  new Router({
       path: '/cancelList',
       name: 'cancelList',
       component: cancelList,
+      meta: {
+        auth : store.getters.alba2_login.login
+      }
+    },
+    {
+      path: '/noticeDetail',
+      name: 'noticeDetail',
+      component: noticeDetail,
+      meta: {
+        auth : store.getters.alba2_login.login
+      }
+    },
+    {
+      path: '/noticeList',
+      name: 'noticeList',
+      component: noticeList,
       meta: {
         auth : store.getters.alba2_login.login
       }

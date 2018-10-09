@@ -107,7 +107,7 @@
                 </td>
                 <td class="text-xs-center bold">{{ props.item.delivery_name }}</td>
                 <td class="text-xs-center bold">{{ props.item.delivery_no }}</td>
-                <td v-if="props.item.status > 0" class="text-xs-center bold padding_zero"><v-btn class="btn" color="info" @click="delivery_modify(props.item.no)">수정</v-btn></td>
+                <td v-if="props.item.status > 1 && props.item.cancel_yn != 'Y'" class="text-xs-center bold padding_zero"><v-btn class="btn" color="info" @click="delivery_modify(props.item.no)">수정</v-btn></td>
                 <td v-else class="text-xs-center">*</td>
                 <td v-if="props.item.cancel_yn == 'Y'" class="text-xs-center bold">취소</td>
                 <td v-else-if="props.item.cancel_yn == 'N'" class="text-xs-center bold"><v-btn class="btn" color="info" @click="order_cancel(props.item.no)">상점주문취소</v-btn></td>
@@ -117,7 +117,9 @@
                 </td>
                 <td v-if="props.item.cancel_yn == 'Y'" class="text-xs-center bold">취소완료</td>
                 <td v-else-if="props.item.status == 0" class="text-xs-center bold padding_zero"><v-btn class="btn" color="info" @click="pay_confirm(props.item.no)">입금확인</v-btn></td>
-                <td v-else class="text-xs-center bold">{{ props.item.status == 1 ? '배송중' : '거래완료' }}</td>
+                <td v-else-if="props.item.status == 1" class="text-xs-center bold"><v-btn class="btn" color="info" @click="delivery_start(props.item.no)">배송시작</v-btn></td>
+                <td v-else-if="props.item.status == 2" class="text-xs-center bold">배송중</td>
+                <td v-else class="text-xs-center bold">거래완료</td>
                 </template>
             </v-data-table>
         </div>
@@ -145,12 +147,13 @@ import modal from '../components/modal'
         today: '',
         s_dt: null,
         e_dt: null,
-        select: { state: 'All', no: 3 },
+        select: { state: 'All', no: 4 },
         items: [
           { state: '입금확인', no: 0 },
-          { state: '배송중', no: 1 },
-          { state: '거래완료', no: 2 },
-          { state: 'All', no: 3 },
+          { state: '배송준비', no: 1 },
+          { state: '배송중', no: 2 },
+          { state: '거래완료', no: 3 },
+          { state: 'All', no: 4 },
         ],
         page: 1,
         start: 0,
@@ -179,6 +182,7 @@ import modal from '../components/modal'
         search: '',
         search_data: '',
         reason: '',
+        btn_cnt: 0,
     }),
     computed: {
       alba2_login() {
@@ -193,7 +197,8 @@ import modal from '../components/modal'
     },
     mounted() {
 
-        this.$store.commit('add_product_btn', false)
+        this.$store.commit('add_product_btn', false);
+        this.$store.commit('add_notice_btn', false);
         let date = new Date();
         let year = date.getFullYear();
         let month = date.getMonth()+1
@@ -286,36 +291,63 @@ import modal from '../components/modal'
             });
         },
         pay_confirm (no) {
-            this.$store.commit('delivery_info' ,{
-                order_no: no,
-            })
-            this.$store.commit('dialog', {
-                dialog: true,
-                title: '입금 확인',
-                content: '입금이 확인 되었으면 송장정보를 입력하세요'
-            })
+            let confirm = window.confirm('입금 확인을 확실히 하셨습니까?')
+
+            if (confirm) {
+                let params = {
+                    order_no: no
+                }
+                this.btn_cnt = 1
+                this.$store.commit('progress', true)
+                this.$store.dispatch('pay_confirm', params).then((res) => {
+                    this.btn_cnt = 0
+                    this.$store.commit('progress', false)
+                    if (res == 'SUCCESS') {
+                        alert('입금확인 처리 하였습니다.')
+                    }
+                    this.list_req()
+                })
+            }
+
+
+        },
+        delivery_start (no) {
+            if(this.btn_cnt == 0) {
+                this.$store.commit('delivery_info' ,{
+                    order_no: no,
+                })
+                this.$store.commit('dialog', {
+                    dialog: true,
+                    title: '배송 시작',
+                    content: '배송 정보를 입력해주세요'
+                })
+            }
         },
         delivery_modify (no) {
-            this.$store.commit('delivery_info' ,{
-                order_no: no,
-            })
-            this.$store.commit('dialog', {
-                dialog: true,
-                title: '송장 수정',
-                content: '송장정보를 수정하세요'
-            })
+            if(this.btn_cnt == 0) {
+                this.$store.commit('delivery_info' ,{
+                    order_no: no,
+                })
+                this.$store.commit('dialog', {
+                    dialog: true,
+                    title: '송장 수정',
+                    content: '송장정보를 수정하세요'
+                })
+            }
         },
         order_cancel (no) {
             console.log(no)
-            this.$store.commit('s_order_cancel_info' ,{
-                s_no: this.alba2_login.no,
-                o_no: no
-            })
-            this.$store.commit('dialog', {
-                dialog: true,
-                title: '상점 주문 취소',
-                content: '주문 취소 사유를 적어주세요. (사용자에게 푸시로 알려줍니다)'
-            })
+            if(this.btn_cnt == 0) {
+                this.$store.commit('s_order_cancel_info' ,{
+                    s_no: this.alba2_login.no,
+                    o_no: no
+                })
+                this.$store.commit('dialog', {
+                    dialog: true,
+                    title: '상점 주문 취소',
+                    content: '주문 취소 사유를 적어주세요. (사용자에게 푸시로 알려줍니다)'
+                })
+            }
             
         },
         o_cancel_y (no) {

@@ -54,7 +54,8 @@
       }
     },
     mounted() {
-        this.$store.commit('add_product_btn', false)
+        this.$store.commit('add_product_btn', false);
+        this.$store.commit('add_notice_btn', false);
         
         // this.$store.commit('alba2_login', {
         //     login: false,

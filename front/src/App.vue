@@ -10,6 +10,14 @@
       class="high_sky_plus"
     >
       <v-list dense>
+        <v-list-tile @click="noticeListGo">
+          <v-list-tile-action>
+            <v-icon>today</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>공지사항</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
         <v-list-tile @click="productListGo">
           <v-list-tile-action>
             <v-icon>dashboard</v-icon>
@@ -45,14 +53,14 @@
             <v-list-tile-title>주문 조회</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click="statisticsGo">
+        <!-- <v-list-tile @click="statisticsGo">
           <v-list-tile-action>
             <v-icon>assessment</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>주문 통계</v-list-tile-title>
           </v-list-tile-content>
-        </v-list-tile>
+        </v-list-tile> -->
         <v-list-tile @click="cancelListGo">
           <v-list-tile-action>
             <v-icon>cancel_presentation</v-icon>
@@ -79,6 +87,7 @@
       <v-toolbar-title v-text="alba2_login.store_name"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-show="add_product_btn" color="info" @click="productAddGo">새 상품 등록</v-btn>
+      <v-btn v-show="add_notice_btn" color="info" @click="productAddGo">새 공지 등록</v-btn>
     </v-toolbar>
     <v-content>
       <router-view class="router_view"/>
@@ -107,6 +116,9 @@ export default {
   computed: {
     add_product_btn() {
       return this.$store.getters.add_product_btn;
+    },
+    add_notice_btn() {
+      return this.$store.getters.add_notice_btn;
     },
     progress() {
       return this.$store.getters.progress;
@@ -147,6 +159,9 @@ export default {
     },
     cancelListGo() {
       this.$router.push('/cancelList');
+    },
+    noticeListGo() {
+      this.$router.push('/noticeList');
     }
     
   }

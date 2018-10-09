@@ -33,6 +33,8 @@
     },
     mounted() {
         this.refreshList()
+        this.$store.commit('add_product_btn', false);
+        this.$store.commit('add_notice_btn', false);
         
     },
     methods: {

@@ -59,7 +59,8 @@ router.get('/l_product', function(req, res, next) {
         price : result[i].price,
         sold_yn : result[i].sold_yn,
         total: result[i].total,
-        options: option_arr
+        options: option_arr,
+        total_cnt: result[i].total_cnt
       }
       arr.push(tmp)
       option_arr = []
@@ -113,7 +114,8 @@ function(req, res, next) {
           o_name : req.body.o_name,
           o_price : req.body.o_price,
           original_name : req.body.original_name,
-          store_no : req.body.store_no,
+          store_no : parseInt(req.body.store_no, 10),
+          total_cnt : parseInt(req.body.total_cnt, 10),
           req : req,
           res : res
         }
@@ -131,7 +133,7 @@ function(req, res, next) {
     let params = {
       img_path : req.body.imageUrl,
       imageName : req.body.imageName,
-      no : parseInt(req.body.no),
+      no : parseInt(req.body.no, 10),
       name : req.body.name ,
       price : req.body.price,
       desc : req.body.desc,
@@ -139,7 +141,8 @@ function(req, res, next) {
       o_name : req.body.o_name,
       o_price : req.body.o_price,
       original_name : req.body.original_name,
-      store_no : req.body.store_no,
+      store_no : parseInt(req.body.store_no, 10),
+      total_cnt : parseInt(req.body.total_cnt, 10),
       req : req,
       res : res
     }

@@ -7,8 +7,8 @@ import createPersistedState from 'vuex-persistedstate'
 
 
 Vue.use(Vuex)
-const api_url = "https://thehandsgift.com:3000/"
-// const api_url = "http://127.0.0.1:3000/"
+// const api_url = "https://thehandsgift.com:3000/"
+const api_url = "http://127.0.0.1:3000/"
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
@@ -39,6 +39,7 @@ export default new Vuex.Store({
       s_no: '',
       o_no: ''
     },
+    add_notice_btn: false,
   },
 
   getters: {
@@ -77,6 +78,9 @@ export default new Vuex.Store({
     },
     s_order_cancel_info: function(state) {
       return state.s_order_cancel_info
+    },
+    add_notice_btn: function(state) {
+      return state.add_notice_btn
     },
   },
 
@@ -123,6 +127,9 @@ export default new Vuex.Store({
     },
     s_order_cancel_info: (state, s_order_cancel_info) => {
       state.s_order_cancel_info = s_order_cancel_info
+    },
+    add_notice_btn: (state, add_notice_btn) => {
+      state.add_notice_btn = add_notice_btn
     },
   },
 
@@ -349,6 +356,20 @@ export default new Vuex.Store({
       })
     },
 
+    delivery_start: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'order/delivery_start',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.data)
+        })
+      })
+    },
+
     s_order_cancel: (context, params) => {
       return new Promise((resolve, reject) => {
         axios({
@@ -399,6 +420,21 @@ export default new Vuex.Store({
           method: 'get',
           params: params,
           url: api_url + 'order/o_cancel_y',
+          responseType: 'json'
+        })
+        .then((res) => {
+          console.log(res)
+          resolve(res.data[0])
+        })
+      })
+    },
+
+    s_notice_add: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'post',
+          params: params,
+          url: api_url + 'notice/s_notice_add',
           responseType: 'json'
         })
         .then((res) => {

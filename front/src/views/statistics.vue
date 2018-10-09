@@ -133,6 +133,8 @@
         }
         this.today = year+ '-' +month+ '-' +day;
         this.$store.commit('statistics_list', '');
+        this.$store.commit('add_product_btn', false);
+        this.$store.commit('add_notice_btn', false);
     },
     methods: {
         changeDate (a) {

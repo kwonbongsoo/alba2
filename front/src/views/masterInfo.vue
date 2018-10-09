@@ -74,7 +74,8 @@
         }
     },
     mounted() {
-        this.$store.commit('add_product_btn', false)
+        this.$store.commit('add_product_btn', false);
+        this.$store.commit('add_notice_btn', false);
         this.id = this.alba2_login.id
 
         this.$store.dispatch('store_info', {

@@ -73,7 +73,8 @@ import modal from '../components/modal'
     },
     mounted() {
       this.$store.commit('product', '')
-      this.$store.commit('add_product_btn', true)
+      this.$store.commit('add_product_btn', true);
+        this.$store.commit('add_notice_btn', false);
       this.$store.dispatch('l_product', {
         page: (this.page-1)*10,
         s_no: this.alba2_login.no
