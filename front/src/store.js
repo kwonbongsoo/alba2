@@ -443,6 +443,21 @@ export default new Vuex.Store({
         })
       })
     },
+
+    s_l_notice: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'notice/s_l_notice',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.data)
+        })
+      })
+    },
+
     
   }
 })

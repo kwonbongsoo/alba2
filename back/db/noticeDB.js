@@ -19,5 +19,18 @@ module.exports = {
     })
   },
 
+  s_l_notice(params, successFn, errorFn) {
+    this.connection.query(
+      'CALL s_l_notice(?, ?)',
+      [params.s_no, params.page],
+    function (error, result) {
+      if (error) {
+        console.log(error)
+        errorFn(error)
+      } else {
+        successFn(result)
+      }
+    })
+  },
   
 } // module

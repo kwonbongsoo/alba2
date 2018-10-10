@@ -115,7 +115,7 @@
 						@change="onFilePicked"
 					>
 				</v-flex>
-        <v-switch :label="`품절 : ${sold_yn.toString()}`" v-model="sold_yn"></v-switch>
+        <v-switch :label="`품절 : ${sold_yn.toString()}`" v-model="sold_yn" readonly></v-switch>
 
       <v-btn @click="submit">상품등록/수정</v-btn>
       <v-btn v-show="this.no == 0" @click="clear">clear</v-btn>
@@ -318,7 +318,7 @@
             price: this.price,
             option: this.optionSubmit,
             no: this.no,
-            sold_yn: this.sold_yn == true ? 'Y' : 'N',
+            sold_yn: this.total_cnt > 0 ? 'N' : 'Y',
             original_name: this.original_name,
             o_name : this.o_name,
             o_price : this.o_price,
@@ -337,7 +337,7 @@
           formData.append('price', this.price);
           formData.append('option', this.optionSubmit)
           formData.append('no', this.no)
-          formData.append('sold_yn', this.sold_yn == true ? 'Y' : 'N')
+          formData.append('sold_yn', this.total_cnt > 0 ? 'N' : 'Y')
           formData.append('original_name', this.original_name)
           formData.append('o_name', this.o_name)
           formData.append('o_price', this.o_price)

@@ -57,6 +57,9 @@
             else if (this.title.length > 30) {
                 alert('제목이 너무 깁니다. 30글자 이하로 적어주세요')
             }
+            else if (this.content.length > 300) {
+                alert('내용이 너무 깁니다. 300글자 이하로 적어주세요')
+            }
             else {
                 let params = {
                     s_no: this.alba2_login.no,
@@ -64,22 +67,26 @@
                     content: this.content
                 }
 
-                console.log(params)
 
-                this.$store.dispatch('s_notice_add', params).then((res) => {
-                    console.log(res);
-                    if (res.result == 'SUCCESS') {
-                        alert('공지사항 등록을 성공했습니다.');
-                        //푸시 날려야함.
 
-                        this.$router.push('/noticeList')
-                    }
-                    else {
-                        alert('공지사항 등록을 실패했습니다. 잠시후 다시 시도해주세요')
-                    }
-                })
+                this.content = this.content.replace(/\n/gi, '&#10;')
+
+                console.log(this.content)
+
+                // this.$store.dispatch('s_notice_add', params).then((res) => {
+                //     console.log(res);
+                //     if (res.result == 'SUCCESS') {
+                //         alert('공지사항 등록을 성공했습니다.');
+                //         //푸시 날려야함.
+
+                //         this.$router.push('/noticeList')
+                //     }
+                //     else {
+                //         alert('공지사항 등록을 실패했습니다. 잠시후 다시 시도해주세요')
+                //     }
+                // })
             }
-        }
+        },
     }
   }
 </script>

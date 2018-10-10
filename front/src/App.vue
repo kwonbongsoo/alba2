@@ -87,7 +87,7 @@
       <v-toolbar-title v-text="alba2_login.store_name"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-show="add_product_btn" color="info" @click="productAddGo">새 상품 등록</v-btn>
-      <v-btn v-show="add_notice_btn" color="info" @click="productAddGo">새 공지 등록</v-btn>
+      <v-btn v-show="add_notice_btn" color="info" @click="noticeDetailGo">새 공지 등록</v-btn>
     </v-toolbar>
     <v-content>
       <router-view class="router_view"/>
@@ -162,6 +162,9 @@ export default {
     },
     noticeListGo() {
       this.$router.push('/noticeList');
+    },
+    noticeDetailGo() {
+      this.$router.push('/noticeDetail');
     }
     
   }
