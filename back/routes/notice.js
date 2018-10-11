@@ -34,6 +34,31 @@ router.post('/s_notice_add', function(req, res, next) {
   })
 });
 
+router.post('/s_notice_update', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    s_no: parseInt(req.query.s_no),
+    n_title: req.query.title,
+    n_content: req.query.content,
+    n_no: parseInt(req.query.n_no, 10)
+  }
+
+  console.log(params);
+
+  noticeDB.s_notice_update(params, (result) => {
+    console.log(result)
+    res.json(result[0])
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
+
 
 router.get('/s_l_notice', function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
@@ -49,6 +74,50 @@ router.get('/s_l_notice', function(req, res, next) {
   console.log(params);
 
   noticeDB.s_l_notice(params, (result) => {
+    console.log(result)
+    res.json(result[0])
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
+
+router.get('/delete_notice', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    n_no: parseInt(req.query.n_no, 10)
+  }
+
+  console.log(params);
+
+  noticeDB.delete_notice(params, (result) => {
+    console.log(result)
+    res.json(result[0])
+  }, (error) => {
+    res.status(200)
+            .set('Content-Type', 'text/plain;charset=UTF-8')
+            .end(error)
+  })
+});
+
+router.get('/s_n_one', function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE")
+  res.setHeader("Access-Control-Max-Age", "3600")
+  res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
+  res.setHeader("Access-Control-Allow-Origin", "*")
+
+  let params = {
+    n_no: parseInt(req.query.n_no, 10)
+  }
+
+  console.log(params);
+
+  noticeDB.s_n_one(params, (result) => {
     console.log(result)
     res.json(result[0])
   }, (error) => {

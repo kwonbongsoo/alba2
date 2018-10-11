@@ -84,7 +84,7 @@ const router =  new Router({
       }
     },
     {
-      path: '/noticeDetail',
+      path: '/noticeDetail/:notice_no',
       name: 'noticeDetail',
       component: noticeDetail,
       meta: {

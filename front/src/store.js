@@ -444,6 +444,20 @@ export default new Vuex.Store({
       })
     },
 
+    s_notice_update: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'post',
+          params: params,
+          url: api_url + 'notice/s_notice_update',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.data[0])
+        })
+      })
+    },
+
     s_l_notice: (context, params) => {
       return new Promise((resolve, reject) => {
         axios({
@@ -457,6 +471,36 @@ export default new Vuex.Store({
         })
       })
     },
+
+    delete_notice: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'notice/delete_notice',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.statusText)
+        })
+      })
+    },
+
+    s_n_one: (context, params) => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          params: params,
+          url: api_url + 'notice/s_n_one',
+          responseType: 'json'
+        })
+        .then((res) => {
+          resolve(res.data[0])
+        })
+      })
+    },
+
+
 
     
   }

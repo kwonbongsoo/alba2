@@ -164,7 +164,7 @@ export default {
       this.$router.push('/noticeList');
     },
     noticeDetailGo() {
-      this.$router.push('/noticeDetail');
+      this.$router.push('/noticeDetail/'+0);
     }
     
   }

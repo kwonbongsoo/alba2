@@ -107,13 +107,17 @@ router.post('/find_pwd', function(req, res, next) {
       let result
       if (error) {
           console.log(error);
-          result.result = 'not send'
+          result = {
+            result : 'not send'
+          }
           res.json(result)
       }
       else {
           console.log('Email sent: ' + info.response);
-          result.result = 'SEND'
-          result.confirm_no = confirm_no
+          result = {
+            result: 'SEND',
+            confirm_no: confirm_no
+          }
           res.json(result)
       }
     });
