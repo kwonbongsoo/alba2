@@ -41,7 +41,6 @@ router.post('/s_notice_add', function(req, res, next) {
       let push_data = {
         // 수신대상
         registration_ids: arr,
-        // to: 'cxmabp7PH1w:APA91bFbvhHqCrnJQ2x7XsGLsco8yjHtDgqBTlmXzPUU97fr2lO4sgtcwPFJ68sfVJiHP6vy6z31Xwb20dBxy78ZVeVQwLho-6WSRX49LhP6Rh0UGP5YvB4ui5EafhmTfypsQ00Or3qP',
         // App이 실행중이지 않을 때 상태바 알림으로 등록할 내용
         notification: {
             title: "NATURE AND HUMAN",
