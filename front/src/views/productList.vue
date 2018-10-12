@@ -9,9 +9,9 @@
         class="mx-auto"
         width="344"
       >
-      <div v-if="product.sold_yn == 'Y'" @click="productDetail(product)" class="sold_out">
+      <!-- <div v-if="product.sold_yn == 'Y'" @click="productDetail(product)" class="sold_out">
         <span>준비중</span>
-      </div>
+      </div> -->
         <v-btn icon class="mr-0 float_right" @click="cancel_dialog(product.no, product.img_name)">
           <v-icon class="red_icon">clear</v-icon>
         </v-btn>

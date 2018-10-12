@@ -7,8 +7,8 @@ module.exports = {
 
   c_order(params, successFn, errorFn) {
     this.connection.query(
-        'CALL c_order(?, ?, ?, ?, ?, ?, ?, ?)',
-        [params.u_no, params.s_no, params.total_price ,params.item_price , params.item_name , params.item_cnt, params.item_option, params.item_no],
+        'CALL c_order(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [params.u_no, params.s_no, params.total_price ,params.item_price , params.item_name , params.item_cnt, params.item_option, params.item_no, params.item_option_no],
       function (error, result) {
         if (error) {
           console.log(error)

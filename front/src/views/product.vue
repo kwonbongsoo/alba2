@@ -32,7 +32,7 @@
         @input="$v.price.$touch()"
         @blur="$v.price.$touch()"
       ></v-text-field>
-      <v-text-field
+      <!-- <v-text-field
         v-model="total_cnt"
         :error-messages="total_cntErrors"
         :counter="15"
@@ -42,7 +42,7 @@
         required
         @input="$v.total_cnt.$touch()"
         @blur="$v.total_cnt.$touch()"
-      ></v-text-field>
+      ></v-text-field> -->
 
       <div>
         옵션 등록 및 수정
@@ -69,11 +69,18 @@
               ></v-text-field>
             </v-flex>
 
-             <v-flex xs4 sm3 md3>
-              <v-btn class="little_top_margin" @click="add_modify_option">등록/수정</v-btn>
+            <v-flex xs4 sm4 md3 lg2>
+              <v-text-field
+                v-model="total_cnt"
+                type="number"
+                color="info"
+                label="수량"
+              ></v-text-field>
             </v-flex>
 
+
           </v-layout>
+              <v-btn class="little_top_margin" @click="add_modify_option">등록/수정</v-btn>
         </v-container>
       </v-form>
 
@@ -92,6 +99,9 @@
             </v-list-tile-content>
             <v-list-tile-content @click="optionClick(item, index)" class="right">
               <v-list-tile-title>{{ formatPrice(item.price) }}원</v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-content @click="optionClick(item, index)" class="right">
+              <v-list-tile-title>{{ item.o_cnt }}개</v-list-tile-title>
             </v-list-tile-content>
             <span class="right margin_left" @click="d_option(item.option_no)">
               <v-icon>clear</v-icon>
@@ -115,7 +125,6 @@
 						@change="onFilePicked"
 					>
 				</v-flex>
-        <v-switch :label="`품절 : ${sold_yn.toString()}`" v-model="sold_yn" readonly></v-switch>
 
       <v-btn @click="submit">상품등록/수정</v-btn>
       <v-btn v-show="this.no == 0" @click="clear">clear</v-btn>
@@ -150,16 +159,18 @@
       imageFile: '',
       inputFileValue: '',
       optionSubmit: '',
-      sold_yn: '',
+      // sold_yn: '',
       original_name: '',
       l_option: [],
       option_price: '',
       option_name: '',
       o_name: '',
       o_price: '',
+      o_cnt: '',
       activeTab: '',
       l_o_idx: -1,
       total_cnt: '',
+      option_no: '',
     }),
     computed: {
       nameErrors () {
@@ -209,11 +220,11 @@
         this.name = this.product.name
         this.desc = this.product.desc
         this.price = this.product.price
-        this.sold_yn = this.product.sold_yn == 'Y' ? true : false
+        // this.sold_yn = this.product.sold_yn == 'Y' ? true : false
         this.imageName = this.product.img_name
         this.imageUrl = this.product.img_url
         this.no = this.product.no
-        this.total_cnt = this.product.total_cnt
+        console.log(this.product.options)
       } 
 
     },
@@ -226,17 +237,17 @@
         this.imageName = ''
         this.imageFile = ''
         this.imageUrl = ''
-        this.sold_yn = ''
+        // this.sold_yn = ''
         this.original_name = ''
         this.l_option = []
         this.o_name = ''
         this.o_price = ''
+        this.o_cnt = ''
         this.l_o_idx = -1
         this.activeTab = ''
         this.option_price = ''
         this.option_name = ''
         this.optionSubmit = ''
-        this.sold_yn = ''
         this.inputFileValue = ''
         this.total_cnt = ''
 
@@ -271,7 +282,6 @@
       },
       submit() {
         this.price = this.price + ''
-        this.total_cnt = this.total_cnt + ''
         if (this.name == '') {
           alert('상품 이름을 입력하세요')
         }
@@ -293,21 +303,14 @@
         else if (this.$route.params.no != '0' && this.imageName == '') {
           alert('이미지를 선택해주세요.')
         }
-        else if (this.total_cnt == '' || this.total_cnt < 1) {
-          alert('수량을 입력해주세요')
-        }
-        else if (this.total_cnt.length > 10) {
-          alert('수량을 다시 입력해주세요')
-        }
         else {
 
-          console.log(this.total_cnt.length)
-          console.log(this.l_option.length)
-          this.total_cnt = parseInt(this.total_cnt, 10);
           this.price = parseInt(this.price, 10);
           for (let i = 0; i < this.l_option.length; i++) {
             this.o_name += this.l_option[i].name + ','
             this.o_price += this.l_option[i].price + ','
+            this.o_cnt += this.l_option[i].o_cnt + ','
+
           }
           let params = {
             imageName: this.imageName,
@@ -318,12 +321,12 @@
             price: this.price,
             option: this.optionSubmit,
             no: this.no,
-            sold_yn: this.total_cnt > 0 ? 'N' : 'Y',
+            // sold_yn: this.total_cnt > 0 ? 'N' : 'Y',
             original_name: this.original_name,
             o_name : this.o_name,
             o_price : this.o_price,
+            o_cnt : this.o_cnt,
             store_no : this.alba2_login.no,
-            total_cnt : this.total_cnt
           }
           console.log(params)
 
@@ -337,12 +340,12 @@
           formData.append('price', this.price);
           formData.append('option', this.optionSubmit)
           formData.append('no', this.no)
-          formData.append('sold_yn', this.total_cnt > 0 ? 'N' : 'Y')
+          // formData.append('sold_yn', this.total_cnt > 0 ? 'N' : 'Y')
           formData.append('original_name', this.original_name)
           formData.append('o_name', this.o_name)
           formData.append('o_price', this.o_price)
+          formData.append('o_cnt', this.o_cnt)
           formData.append('store_no', this.alba2_login.no)
-          formData.append('total_cnt', this.total_cnt)
 
 
           this.$store.commit('progress', true)
@@ -365,29 +368,63 @@
           if (this.l_option.length > 0) {
             for( let i = 0; i < this.l_option.length ; i++) {
               if (this.l_option[i].name == this.option_name) {
-                dup = false
-                break;
+                if (this.option_no != this.l_option[i].option_no && this.no != 0) {
+                  dup = false
+                  break;
+                } 
+                
               }
             }
           }
           if (dup) {
+            console.log(this.total_cnt)
             if(this.l_o_idx == -1) {
               let o_p
-              if (parseInt(this.option_price) <= 1000000)
-                  o_p = this.option_price
-              else 
+              let t_c
+              if (parseInt(this.option_price, 10) <= 1000000 && parseInt(this.total_cnt, 10) <= 1000000) {
+                o_p = this.option_price
+                t_c = this.total_cnt
+              }
+              else if (parseInt(this.option_price, 10) > 1000000 && parseInt(this.total_cnt, 10) <= 1000000) {
                 o_p = 1000000
+                t_c = this.total_cnt
+              }
+              else if (parseInt(this.option_price, 10) <= 1000000 && parseInt(this.total_cnt, 10) > 1000000) {
+                o_p = this.option_price
+                t_c = 1000000
+              }
+              else {
+                t_c = 1000000
+                o_p = 1000000
+              }
               this.l_option.push({
                 name: this.option_name,
-                price: o_p
+                price: o_p,
+                o_cnt: t_c,
+                no: this.option_no
+                
               })
+              console.log(this.l_option)
+              console.log(this.total_cnt)
             }
             else {
+              console.log(this.total_cnt)
               this.l_option[this.l_o_idx].name = this.option_name
-              if (parseInt(this.option_price) <= 1000000)
+              if (parseInt(this.option_price, 10) <= 1000000 && parseInt(this.total_cnt, 10) <= 1000000) {
                 this.l_option[this.l_o_idx].price = this.option_price
-              else 
+                this.l_option[this.l_o_idx].o_cnt = this.total_cnt
+              }
+              else if (parseInt(this.total_cnt, 10) > 1000000 && parseInt(this.option_price, 10) <= 1000000) {
+                this.l_option[this.l_o_idx].o_cnt = this.total_cnt 
+              }
+              else if (parseInt(this.total_cnt, 10) <= 1000000 && parseInt(this.option_price, 10) > 1000000) {
+                this.l_option[this.l_o_idx].price = this.option_price
+              }
+              else {
                 this.l_option[this.l_o_idx].price = 1000000
+                this.l_option[this.l_o_idx].o_cnt = 1000000
+              }
+                
             }
           }
           else {
@@ -397,6 +434,8 @@
           this.option_price = ''
           this.l_o_idx = -1;
           this.activeTab = ''
+          this.total_cnt = ''
+          this.option_no = ''
         }
       },
       d_option(no) {
@@ -415,13 +454,17 @@
           this.activeTab = item.name
           this.option_name = item.name
           this.option_price = item.price
+          this.total_cnt = item.o_cnt
           this.l_o_idx = index
+          this.option_no = item.option_no
         }
         else {
           this.activeTab = ''
           this.option_name = ''
           this.option_price = ''
+          this.total_cnt = ''
           this.l_o_idx = -1
+          this.option_no = ''
         }
       },
       formatPrice(value) {

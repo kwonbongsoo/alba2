@@ -32,18 +32,20 @@ router.get('/l_product', function(req, res, next) {
   }
   productDB.l_product(params, (result) => {
     let arr = []
-    let tmp, option_names, option_prices, option_no, option_arr = []
+    let tmp, option_names, option_prices, option_no, option_cnts, option_arr = []
     for (let i = 0; i < result.length;  i++) {
       // console.log(result[i])
       if(result[i].option_names) {
         option_names = result[i].option_names.split(',')
         option_prices = result[i].option_price.split(',')
         option_no = result[i].option_no.split(',')
+        option_cnts = result[i].option_cnts.split(',')
         for(let j = 0; j < option_names.length; j++) {
           tmp = {
             name : option_names[j],
             price : option_prices[j],
-            option_no : option_no[j]
+            option_no : option_no[j],
+            o_cnt : option_cnts[j]
           }
           option_arr.push(tmp)
         }
@@ -57,7 +59,6 @@ router.get('/l_product', function(req, res, next) {
         name : result[i].name,
         no : result[i].no,
         price : result[i].price,
-        sold_yn : result[i].sold_yn,
         total: result[i].total,
         options: option_arr,
         total_cnt: result[i].total_cnt
@@ -110,12 +111,11 @@ function(req, res, next) {
           name : req.body.name ,
           price : req.body.price,
           desc : req.body.desc,
-          sold_yn : req.body.sold_yn,
           o_name : req.body.o_name,
           o_price : req.body.o_price,
+          o_cnt : req.body.o_cnt,
           original_name : req.body.original_name,
           store_no : parseInt(req.body.store_no, 10),
-          total_cnt : parseInt(req.body.total_cnt, 10),
           req : req,
           res : res
         }
@@ -137,12 +137,11 @@ function(req, res, next) {
       name : req.body.name ,
       price : req.body.price,
       desc : req.body.desc,
-      sold_yn : req.body.sold_yn,
       o_name : req.body.o_name,
       o_price : req.body.o_price,
+      o_cnt : req.body.o_cnt,
       original_name : req.body.original_name,
       store_no : parseInt(req.body.store_no, 10),
-      total_cnt : parseInt(req.body.total_cnt, 10),
       req : req,
       res : res
     }

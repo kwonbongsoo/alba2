@@ -23,7 +23,8 @@ router.post('/c_order', function(req, res, next) {
       item_name: req.body.item_name,
       item_cnt: req.body.item_cnt,
       item_option: req.body.item_option,
-      item_no: req.body.item_no
+      item_no: req.body.item_no,
+      item_option_no: req.body.item_option_no
   }
 
   console.log(params)
