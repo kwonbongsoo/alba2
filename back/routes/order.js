@@ -133,7 +133,7 @@ router.get('/pay_confirm', function(req, res, next) {
     console.log(result[0][0])
     if(result[0][0].result == 'SUCCESS') {
 
-      let message = push_data('입금 확인이 되었습니다', result[0][0].token);
+      let message = push.push_one('입금 확인이 되었습니다', result[0][0].token);
 
       push.fcm.send(message, function(err, response) {
         if (err) {
@@ -205,7 +205,8 @@ router.get('/delivery_start', function(req, res, next) {
       else if (result[0][0].result == 'MODIFY')
         content = '송장정보가 변경되었습니다. 송장 보내드립니다 ' + result[0][0].delivery_info
         
-      let message = push_data(content, result[0][0].token)
+        
+      let message = push.push_one(content, result[0][0].token)
 
       push.fcm.send(message, function(err, response) {
         if (err) {
@@ -337,10 +338,10 @@ router.get('/s_order_cancel', function(req, res, next) {
   console.log(params);
 
   orderDB.s_order_cancel(params, (result) => {
-    console.log(result)
-    if (result[0].result == 'SUCCESS') {
-      let content = '주문이 취소 되었습니다 사유:' +result[0].reason
-      let message = push_data(content, result[0].token)
+    console.log(result[0][0].result)
+    if (result[0][0].result == 'SUCCESS') {
+      let content = '주문이 취소 되었습니다 사유:' +result[0][0].o_cancel_reason
+      let message = push.push_one(content, result[0][0].token)
 
       push.fcm.send(message, function(err, response) {
         if (err) {
@@ -427,32 +428,6 @@ router.get('/o_cancel_y', function(req, res, next) {
             .end(error)
   })
 });
-
-
-function push_data(content, token) {
-  let data = {
-    // 수신대상
-    to: token,
-    notification: {
-        title: "NATURE AND HUMAN",
-        body: content,
-        sound: "default",
-        click_action: "FCM_PLUGIN_ACTIVITY",
-        icon: "fcm_push_icon"
-    },
-    // 메시지 중요도
-    priority: "high",
-    // App 패키지 이름
-    restricted_package_name: "human.nature.customerorderapp",
-    // App에게 전달할 데이터
-    data: {
-        content: content
-    }
-  };
-  return data;  
-}
-
-
 
 
 module.exports = router;
