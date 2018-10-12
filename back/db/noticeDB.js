@@ -74,5 +74,19 @@ module.exports = {
       }
     })
   },
+
+  broadcast(s_no, successFn, errorFn) {
+    this.connection.query(
+      'CALL broadcast(?)',
+      [s_no],
+    function (error, result) {
+      if (error) {
+        console.log(error)
+        errorFn(error)
+      } else {
+        successFn(result)
+      }
+    })
+  },
   
 } // module
