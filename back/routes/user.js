@@ -38,6 +38,7 @@ router.post('/email_auth_confirm', function(req, res, next) {
   console.log(params)
 
   userDB.email_auth_confirm(params, (result) => {
+    console.log(result)
     if (result[0].result === 'SEND') {
       let email = params.email;
  
@@ -57,16 +58,23 @@ router.post('/email_auth_confirm', function(req, res, next) {
     
     
       transporter.sendMail(mailOptions, function(error, info){
-        result[0].confirm_no = params.confirm_no
+        // result[0].confirm_no = params.confirm_no
+        let resp
         if (error) {
             console.log(error);
             res.json('not send')
         }
         else {
             console.log('Email sent: ' + info.response);
-            res.json(result[0])
+            resp = {
+              confirm_no: params.confirm_no,
+              result: result[0].result
+            }
+            res.json(resp)
         }
       });
+    } else {
+      res.json(result[0])
     }
     
   }, (error) => {
