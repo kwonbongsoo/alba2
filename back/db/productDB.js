@@ -20,7 +20,7 @@ module.exports = {
   },
   add(params, successFn, errorFn) {
     this.connection.query(
-      'CALL add_product(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'CALL add_product(?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [params.name, params.price, params.desc, params.o_name, params.o_price, params.o_cnt, params.imageName, params.img_path, params.store_no],
       function (error, result) {
         console.log(error)
@@ -33,7 +33,7 @@ module.exports = {
   },
   update(params, successFn, errorFn) {
     this.connection.query(
-      'CALL update_product(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'CALL update_product(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [params.no, params.name, params.price, params.desc, params.o_name, params.o_price, params.o_cnt, params.imageName, params.img_path, params.store_no],
       function (error, result) {
         console.log(error)

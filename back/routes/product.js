@@ -79,14 +79,14 @@ function(req, res, next) {
   res.setHeader("Access-Control-Allow-Headers", "x-requested-with")
   res.setHeader("Access-Control-Allow-Origin", "*")
   // res.send('respond with a resource');
-  
+  console.log(req.body.store_no);
   if(req.file) {
-    sharp(req.file.buffer)
-    .resize(400, 200)
-    .max()
-    .toFormat(req.file.mimetype.split('/')[1])
-    .toBuffer()
-    .then(function(outputBuffer) {
+    // sharp(req.file.buffer)
+    // .resize(400, 200)
+    // .max()
+    // .toFormat(req.file.mimetype.split('/')[1])
+    // .toBuffer()
+    // .then(function(outputBuffer) {
     // outputBuffer contains JPEG image data no wider than 200 pixels and no higher
     // than 200 pixels regardless of the inputBuffer image dimensions
     let i_name = new Date().getTime()+'.'+req.file.mimetype.split('/')[1]
@@ -98,7 +98,7 @@ function(req, res, next) {
     };
     
     var s3obj = new aws.S3({ params: s3_params });
-    s3obj.upload({ Body: outputBuffer })
+    s3obj.upload({ Body: req.file.buffer })
     .on('httpUploadProgress',function(progress) {
       console.log(Math.round(progress.loaded/progress.total*100)+ '% done');
       }).
@@ -128,7 +128,7 @@ function(req, res, next) {
           // console.log(params)
         }
       })
-    })
+    // })
   } else {
     let params = {
       img_path : req.body.imageUrl,

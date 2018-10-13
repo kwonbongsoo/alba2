@@ -84,7 +84,7 @@
         </v-container>
       </v-form>
 
-      <div>
+      <div class="margin_top">
         옵션 목록
       </div>
 
@@ -303,6 +303,9 @@
         else if (this.$route.params.no != '0' && this.imageName == '') {
           alert('이미지를 선택해주세요.')
         }
+        else if (this.l_option.length == 0) {
+          alert('옵션별로 수량을 체크 하기 때문에 옵션을 입력하셔야합니다')
+        }
         else {
 
           this.price = parseInt(this.price, 10);
@@ -510,7 +513,8 @@
 }
 
 .little_top_margin {
-  margin-top: 16px;
+  // margin-top: 16px;
+  float: right;
 }
 
 .margin_left {
@@ -522,6 +526,9 @@
 }
 .activeBack *{
   color: black;
+}
+.margin_top  {
+  margin-top: 40px;
 }
 
 </style>
