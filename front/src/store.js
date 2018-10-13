@@ -7,8 +7,8 @@ import createPersistedState from 'vuex-persistedstate'
 
 
 Vue.use(Vuex)
-const api_url = "https://thehandsgift.com:3000/"
-// const api_url = "http://127.0.0.1:3000/"
+// const api_url = "https://thehandsgift.com:3000/"
+const api_url = "http://127.0.0.1:3000/"
 
 export default new Vuex.Store({
   plugins: [createPersistedState()],
@@ -321,7 +321,10 @@ export default new Vuex.Store({
         .then((res) => {
           console.log(res.data)
           context.commit('o_list', res.data);
-          resolve(res.data[0])
+          if (res.data.length > 0)
+            resolve(res.data[0])
+          else
+            resolve(res.data)
         })
       })
     },

@@ -260,10 +260,12 @@ import modal from '../components/modal'
                 console.log(params)
                 this.$store.dispatch('s_l_order', params).then((res) => {
                     console.log(res)
-                    this.o_length = res.total / 30;
-                    this.o_length = parseInt(this.o_length, 10);
-                    if (res.total % 30 > 0) {
-                    this.o_length += 1;
+                    if (res.length > 0) {
+                        this.o_length = res.total / 30;
+                        this.o_length = parseInt(this.o_length, 10);
+                        if (res.total % 30 > 0) {
+                            this.o_length += 1;
+                        }
                     }
                 });
             }
@@ -283,10 +285,12 @@ import modal from '../components/modal'
                 status: this.select.no,
                 search: this.search_data
             }).then((res) => {
-                this.o_length = res.total / 30;
-                this.o_length = parseInt(this.o_length, 10);
-                if (res.total % 30 > 0) {
-                this.o_length += 1;
+                if (res.length > 0) {
+                    this.o_length = res.total / 30;
+                    this.o_length = parseInt(this.o_length, 10);
+                    if (res.total % 30 > 0) {
+                        this.o_length += 1;
+                    }
                 }
             });
         },
