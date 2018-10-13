@@ -15,7 +15,7 @@ const upload = multer({ storage: memorystorage })
 
 
 //섬네일처리
-const sharp = require('sharp');
+// const sharp = require('sharp');
 
 /* GET users listing. */
 router.get('/l_product', function(req, res, next) {
