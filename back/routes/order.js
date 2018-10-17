@@ -270,7 +270,7 @@ router.get('/delivery_start', function(req, res, next) {
   
     orderDB.order_end(params, (result) => {
       console.log(result[0])
-      res.json(result[0][0])
+      res.json(result[0])
     }, (error) => {
       res.status(200)
               .set('Content-Type', 'text/plain;charset=UTF-8')
