@@ -98,11 +98,14 @@
                 <td class="text-xs-right bold">{{ props.item.total_price }}</td>
                 <td class="text-xs-center bold">
                     <v-tooltip bottom>
-                        <span slot="activator">{{ props.item.product_names }}</span>
-                        <div class="product_info">{{ props.item.product_names }}</div>
+                        <span slot="activator" v-html="strReplace(props.item.product_names)"></span>
+                        <div v-for="value in props.item.product_desc" :key="value">
+                            <div class="product_info">{{ value }}</div>
+                        </div>
+                        <!-- <div class="product_info">{{ props.item.product_names }}</div>
                         <div class="product_info">{{ props.item.product_prices }}</div>
                         <div class="product_info">{{ props.item.count }}</div>
-                        <div class="product_info">{{ props.item.options }}</div>
+                        <div class="product_info">{{ props.item.options }}</div> -->
                     </v-tooltip>
                 </td>
                 <td class="text-xs-center bold">{{ props.item.delivery_name }}</td>
@@ -397,6 +400,9 @@ import modal from '../components/modal'
               }
             })
           }
+        },
+        strReplace(str) {
+            return str.replace('/', '<BR>');
         }
     }
   }
