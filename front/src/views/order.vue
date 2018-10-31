@@ -96,18 +96,10 @@
                 <td class="text-xs-center bold">{{ props.item.order_time }}</td>
                 <td class="text-xs-center bold">{{ props.item.alias }}</td>
                 <td class="text-xs-right bold">{{ props.item.total_price }}</td>
-                <td class="text-xs-center bold">
-                    <v-tooltip bottom>
-                        <span slot="activator" v-html="strReplace(props.item.product_names)"></span>
-                        <div v-for="value in props.item.product_desc" :key="value">
-                            <div class="product_info">{{ value }}</div>
-                        </div>
-                        <!-- <div class="product_info">{{ props.item.product_names }}</div>
-                        <div class="product_info">{{ props.item.product_prices }}</div>
-                        <div class="product_info">{{ props.item.count }}</div>
-                        <div class="product_info">{{ props.item.options }}</div> -->
-                    </v-tooltip>
-                </td>
+                <td class="text-xs-right bold" v-html="strReplace(props.item.product_names)"></td>
+                <td class="text-xs-right bold" v-html="strReplace(props.item.product_prices)"></td>
+                <td class="text-xs-right bold" v-html="strReplace(props.item.options)"></td>
+                <td class="text-xs-right bold" v-html="strReplace(props.item.count)"></td>
                 <td class="text-xs-center bold">{{ props.item.delivery_name }}</td>
                 <td class="text-xs-center bold">{{ props.item.delivery_no }}</td>
                 <td v-if="props.item.status > 1 && props.item.cancel_yn != 'Y'" class="text-xs-center bold padding_zero"><v-btn class="btn" color="info" @click="delivery_modify(props.item.no)">수정</v-btn></td>
@@ -170,7 +162,10 @@ import modal from '../components/modal'
             },
             { text: '주문자', align: 'center', sortable: false, class: 'bold' },
             { text: '총가격', align: 'center', sortable: false, class: 'bold' },
-            { text: '상품(상세정보를 보시려면 커서를 올리세요)', align: 'center', sortable: false, class: 'bold' },
+            { text: '상품명', align: 'center', sortable: false, class: 'bold' },
+            { text: '상품가격', align: 'center', sortable: false, class: 'bold' },
+            { text: '상품옵션', align: 'center', sortable: false, class: 'bold' },
+            { text: '수량', align: 'center', sortable: false, class: 'bold' },
             //   { text: '상품가격', align: 'center', sortable: false, class: 'bold' },
             //   { text: '상품상세정보', align: 'center', sortable: false, class: 'bold' },
             { text: '택배회사', align: 'center', sortable: false, class: 'bold' },
