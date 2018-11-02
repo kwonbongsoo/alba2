@@ -144,7 +144,8 @@ router.post('/u_add', function(req, res, next) {
     token: req.body.token,
     alias: req.body.alias,
     addr: req.body.addr,
-    addr_detail: req.body.addr_detail
+    addr_detail: req.body.addr_detail,
+    tel: req.body.tel
   }
 
   console.log(params)
@@ -243,7 +244,8 @@ router.get('/u_update', function(req, res, next) {
     u_no: parseInt(req.query.u_no),
     alias: req.query.alias,
     addr: req.query.addr,
-    addr_detail: req.query.addr_detail
+    addr_detail: req.query.addr_detail,
+    tel: req.query.tel
   }
 
   console.log(params);

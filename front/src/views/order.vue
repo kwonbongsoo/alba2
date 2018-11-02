@@ -258,13 +258,17 @@ import modal from '../components/modal'
                 console.log(params)
                 this.$store.dispatch('s_l_order', params).then((res) => {
                     console.log(res)
-                    if (res.length > 0) {
+                    console.log(res.length)
+                    if (res) {
                         this.o_length = res.total / 30;
+                        console.log(this.o_length)
                         this.o_length = parseInt(this.o_length, 10);
+                        console.log(this.o_length)
                         if (res.total % 30 > 0) {
                             this.o_length += 1;
                         }
                     }
+                    console.log(this.o_length)
                 });
             }
         },
@@ -397,7 +401,7 @@ import modal from '../components/modal'
           }
         },
         strReplace(str) {
-            return str.replace('/', '<BR>');
+            return str.replace(/\//gi, '<BR>');
         }
     }
   }
