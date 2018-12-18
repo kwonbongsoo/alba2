@@ -319,12 +319,11 @@ export default new Vuex.Store({
           responseType: 'json'
         })
         .then((res) => {
-          console.log(res.data)
           context.commit('o_list', res.data);
           if (res.data.length > 0)
             resolve(res.data[0])
           else
-            resolve(res.data)
+            resolve(null)
         })
       })
     },

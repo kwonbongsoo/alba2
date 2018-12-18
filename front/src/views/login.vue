@@ -8,7 +8,7 @@
                 <v-toolbar-title>로그인</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
-              <v-card-text>
+              <v-card-text> 
                 <v-form>
                     <v-text-field 
                         prepend-icon="person" 

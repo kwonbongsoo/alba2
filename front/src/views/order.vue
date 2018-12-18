@@ -95,6 +95,7 @@
                 <template slot="items" slot-scope="props">
                 <td class="text-xs-center bold">{{ props.item.order_time }}</td>
                 <td class="text-xs-center bold">{{ props.item.alias }}</td>
+                <td class="text-xs-center bold">{{ props.item.tel }}</td>
                 <td class="text-xs-right bold">{{ props.item.total_price }}</td>
                 <td class="text-xs-right bold" v-html="strReplace(props.item.product_names)"></td>
                 <td class="text-xs-right bold" v-html="strReplace(props.item.product_prices)"></td>
@@ -161,6 +162,7 @@ import modal from '../components/modal'
                 class: 'bold'
             },
             { text: '주문자', align: 'center', sortable: false, class: 'bold' },
+            { text: '전화번호', align: 'center', sortable: false, class: 'bold' },
             { text: '총가격', align: 'center', sortable: false, class: 'bold' },
             { text: '상품명', align: 'center', sortable: false, class: 'bold' },
             { text: '상품가격', align: 'center', sortable: false, class: 'bold' },
@@ -258,8 +260,8 @@ import modal from '../components/modal'
                 console.log(params)
                 this.$store.dispatch('s_l_order', params).then((res) => {
                     console.log(res)
-                    console.log(res.length)
                     if (res) {
+                        console.log(res);
                         this.o_length = res.total / 30;
                         console.log(this.o_length)
                         this.o_length = parseInt(this.o_length, 10);
@@ -267,6 +269,9 @@ import modal from '../components/modal'
                         if (res.total % 30 > 0) {
                             this.o_length += 1;
                         }
+                    }
+                    else {
+                        this.o_length = 1;
                     }
                     console.log(this.o_length)
                 });
